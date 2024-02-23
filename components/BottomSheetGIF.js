@@ -233,8 +233,29 @@ const BottomSheetGIF = forwardRef(
           `v1/store-guest-comment?token=${token}`,
           payload
         );
-        console.log(response?.data, "COMMENT PHOTO RESPONSE");
+        console.log(response?.data, "COMMENT RESPONSE");
+
         onRefresh();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const storeUserLike = async () => {
+      try {
+        const payload = {
+          user_id: String(userData?.user_id),
+          foto_id: String(foto_id),
+        };
+        const response = await client.post(
+          `v1/store-guest-like?token=${token}`,
+          payload
+        );
+        console.log(response?.data, "LIKE RESPONSE");
+        if (response?.status === 200) {
+          toggleLove();
+          onRefresh();
+        }
       } catch (error) {
         console.error(error);
       }
@@ -261,28 +282,12 @@ const BottomSheetGIF = forwardRef(
         await MediaLibrary.saveToLibraryAsync(uri);
 
         setDownloadLoading(false);
+        toggleMenu();
         Alert.alert("Success", "Gambar berhasil disimpan ke galeri.");
       } catch (error) {
         Alert.alert("An error occured!", error.message);
         console.error(error);
       }
-    };
-
-    const LoadingOverlay = ({ visible }) => {
-      return (
-        <Modal
-          transparent
-          animationType="fade"
-          visible={visible}
-          onRequestClose={() => {}}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.indicatorContainer}>
-              <ActivityIndicator size="large" color="#fff" />
-            </View>
-          </View>
-        </Modal>
-      );
     };
 
     return (
@@ -340,7 +345,7 @@ const BottomSheetGIF = forwardRef(
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.bottomSheetButton}
-                onPress={toggleLove}
+                onPress={storeUserLike}
               >
                 <AntDesign
                   name={"hearto"}
@@ -443,24 +448,39 @@ const BottomSheetGIF = forwardRef(
               <Text style={[styles.text, { fontSize: 16, color: "#000000" }]}>
                 Komentar
               </Text>
-              {comment?.length >= 2 ? (
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => openBottomSheet()}
-                >
-                  <Feather
-                    name={"more-horizontal"}
-                    style={{ color: "#FFF", fontSize: 18 }}
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity style={styles.buttonDisabled} disabled>
-                  <Feather
-                    name={"more-horizontal"}
-                    style={{ color: "#FFF", fontSize: 18 }}
-                  />
-                </TouchableOpacity>
-              )}
+              <View style={styles.iconWrapper}>
+                <View style={styles.iconTextWrapper}>
+                  <Text style={{ fontFamily: "Poppins-Bold", marginTop: 2 }}>
+                    {gifData?.like?.length}
+                  </Text>
+                  <TouchableOpacity
+                    style={[styles.button, { minWidth: 22.5, minHeight: 22.5 }]}
+                  >
+                    <AntDesign
+                      name="heart"
+                      style={{ color: "#FFF", fontSize: 10 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {comment?.length >= 2 ? (
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => openBottomSheet()}
+                  >
+                    <Feather
+                      name={"more-horizontal"}
+                      style={{ color: "#FFF", fontSize: 14 }}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity style={styles.buttonDisabled} disabled>
+                    <Feather
+                      name={"more-horizontal"}
+                      style={{ color: "#FFF", fontSize: 14 }}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
             <View style={{ marginTop: 8 }}>
               {comment?.length > 0 &&
@@ -836,5 +856,14 @@ const styles = StyleSheet.create({
   },
   textBold: {
     fontFamily: "Poppins-Bold",
+  },
+  iconWrapper: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  iconTextWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
 });
