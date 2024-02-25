@@ -25,7 +25,7 @@ export default function History() {
           />
           <View style={styles.textWrapper}>
             <Text style={styles.text}>
-              Anda baru saja mendownload gambar berjudul "Wave to earth"
+              Anda baru saja mendownload gambar berjudul "laksa"
             </Text>
           </View>
         </View>
@@ -37,7 +37,7 @@ export default function History() {
           />
           <View style={styles.textWrapper}>
             <Text style={styles.text}>
-              Anda baru saja mendownload gambar berjudul "Wave to earth"
+              Anda baru saja mendownload gambar berjudul "laksa"
             </Text>
           </View>
         </View>
@@ -49,7 +49,7 @@ export default function History() {
           />
           <View style={styles.textWrapper}>
             <Text style={styles.text}>
-              Anda baru saja mendownload gambar berjudul "Wave to earth"
+              Anda baru saja mendownload gambar berjudul "laksa"
             </Text>
           </View>
         </View>

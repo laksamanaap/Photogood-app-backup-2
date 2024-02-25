@@ -260,7 +260,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 12,
     marginTop: 16,
-    marginBottom: 16,
   },
   commentAuthor: {
     fontFamily: "Poppins-Bold",
@@ -295,7 +294,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   addComment: {
-    marginTop: 12,
+    marginTop: 24,
     marginBottom: 40,
     flexDirection: "row",
     alignItems: "center",

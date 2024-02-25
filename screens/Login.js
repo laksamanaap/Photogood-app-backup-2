@@ -57,11 +57,9 @@ export default function Login(props) {
       .then(async (response) => {
         setIsLoading(false);
         if (response.status === 200) {
-          // Save token in AsyncStorage
           AsyncStorage.setItem("token", response?.data.login_tokens)
             .then(() => {
               console.log("Token saved in AsyncStorage");
-              // Update authenticated status
               handleAuthenticated();
             })
             .catch((error) => {
