@@ -10,9 +10,11 @@ import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
+  Picker,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import RNPickerSelect from "react-native-picker-select";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
@@ -25,16 +27,17 @@ export default function Upload() {
   const [value, setValue] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [items, setItems] = useState([
-    { label: "Hewan", value: "Hewan" },
-    { label: "Tumbuhan", value: "Banana" },
-  ]);
 
+  const [typePhoto, setTypePhoto] = useState("GIF");
+  const [categoryPhoto, setCategoryPhoto] = useState("1");
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
   const [userStatus, setUserStatus] = useState("1");
   const [memberId, setMemberId] = useState(null);
+
+  const [judulFoto, setJudulFoto] = useState("");
+  const [deskripsiFoto, setDeskripsiFoto] = useState("");
 
   const getTokenFromStorage = async () => {
     try {
@@ -69,8 +72,7 @@ export default function Upload() {
 
   const pickImage = async (sourceType) => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 3],
       quality: 1,
       sourceType: sourceType,
@@ -84,7 +86,6 @@ export default function Upload() {
   const pickFromCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
@@ -132,11 +133,11 @@ export default function Upload() {
       }
 
       // Temporary
-      formData.append("judul_foto", "laksa");
-      formData.append("deskripsi_foto", "melody");
+      formData.append("judul_foto", judulFoto);
+      formData.append("deskripsi_foto", deskripsiFoto);
       formData.append("user_id", userData?.user_id);
       formData.append("kategori_id", "1");
-      formData.append("type_foto", "GIF");
+      formData.append("type_foto", typePhoto);
       formData.append("status", "1");
 
       const responseMember = await client.post(
@@ -191,6 +192,7 @@ export default function Upload() {
 
       const imageUriParts = image.split(".");
       const imageExtension = imageUriParts[imageUriParts.length - 1];
+      console.log(imageExtension, "IMAGE EXTENSIONSS");
       const imageType = `image/${imageExtension}`;
 
       if (
@@ -202,7 +204,7 @@ export default function Upload() {
       ) {
         formData.append("images", {
           uri: image,
-          name: "photo.jpg",
+          name: `photo.${imageExtension}`,
           type: imageType,
         });
       } else {
@@ -212,12 +214,12 @@ export default function Upload() {
       }
 
       // Temporary
-      formData.append("judul_foto", "laksa");
-      formData.append("deskripsi_foto", "melody");
+      formData.append("judul_foto", judulFoto);
+      formData.append("deskripsi_foto", deskripsiFoto);
       formData.append("user_id", userData?.user_id);
       formData.append("member_id", memberId);
       formData.append("kategori_id", "1");
-      formData.append("type_foto", "GIF");
+      formData.append("type_foto", typePhoto);
       formData.append("status", "1");
 
       const responseMember = await client.post(
@@ -317,9 +319,15 @@ export default function Upload() {
     }
   };
 
+  console.log("judul foto upload", judulFoto);
+  console.log("deskripsi foto upload", deskripsiFoto);
   console.log("Image Value : ", image);
   console.log("userData upload : ", userData);
   console.log("member id upload : ", memberId);
+  console.log("upload tipe foto", typePhoto);
+  console.log("upload categori foto", categoryPhoto);
+
+  console.log("Upload Image : ", image);
 
   if (loading) {
     return (
@@ -361,39 +369,83 @@ export default function Upload() {
       <View style={{ width: "100%", marginTop: 30 }}>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Judul Foto</Text>
-          <TextInput style={styles.input} placeholder="Judul Foto" />
+          <TextInput
+            style={styles.input}
+            placeholder="Judul Foto"
+            value={judulFoto}
+            onChangeText={(text) => setJudulFoto(text)}
+          />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Deskripsi Foto</Text>
-          <TextInput style={styles.input} placeholder="Deskripsi Foto" />
+          <TextInput
+            style={styles.input}
+            placeholder="Deskripsi Foto"
+            value={deskripsiFoto}
+            onChangeText={(text) => setDeskripsiFoto(text)}
+          />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Kategori Foto</Text>
-          {/* <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
+          <RNPickerSelect
+            onValueChange={(value) => setCategoryPhoto(value)}
+            useNativeAndroidPickerStyle={false}
             style={{
-              borderWidth: 0,
-              backgroundColor: "#ECECEC",
+              inputAndroid: {
+                fontFamily: "Poppins-Regular",
+                backgroundColor: "#ECECEC",
+                height: 40,
+                width: "100%",
+                borderColor: "#ECECEC",
+                borderWidth: 1,
+                marginBottom: 25,
+                padding: 10,
+                borderRadius: 100,
+              },
+              placeholder: {
+                fontFamily: "Poppins-Regular",
+                color: "#888",
+              },
             }}
-            dropDownContainerStyle={{
-              borderWidth: 0,
-              backgroundColor: "white",
-            }}
-            textStyle={{
-              color: "#888",
-              fontFamily: "Poppins-Regular",
-            }}
-            arrowStyle={{
-              color: "#888",
-            }}
-          /> */}
+            items={[
+              { label: "Hewan", value: "1" },
+              { label: "Alam", value: "2" },
+              { label: "Laut", value: "3" },
+              { label: "Lucu", value: "4" },
+            ]}
+          />
         </View>
-        <View style={{ marginTop: 25 }}>
+        <View style={[styles.inputContainer]}>
+          <Text style={styles.label}>Tipe Foto</Text>
+          <RNPickerSelect
+            onValueChange={(value) => setTypePhoto(value)}
+            useNativeAndroidPickerStyle={false}
+            solution
+            style={{
+              inputAndroid: {
+                fontFamily: "Poppins-Regular",
+                backgroundColor: "#ECECEC",
+                height: 40,
+                width: "100%",
+                borderColor: "#ECECEC",
+                borderWidth: 1,
+                marginBottom: 25,
+                padding: 10,
+                borderRadius: 100,
+              },
+              placeholder: {
+                fontFamily: "Poppins-Regular",
+                color: "#888",
+              },
+            }}
+            items={[
+              { label: "GIF", value: "GIF" },
+              { label: "Foto", value: "Photo" },
+              { label: "Photo", value: "Vector" },
+            ]}
+          />
+        </View>
+        <View style={{ marginBottom: 28 }}>
           <TouchableOpacity
             style={[
               styles.button,

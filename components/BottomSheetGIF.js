@@ -429,7 +429,7 @@ const BottomSheetGIF = forwardRef(
                 ellipsizeMode="tail"
                 style={[styles.textBold, { fontSize: 24 }]}
               >
-                {judul_foto} - {foto_id}
+                {judul_foto}
               </Text>
               <Text
                 style={[
