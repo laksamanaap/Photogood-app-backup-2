@@ -389,7 +389,7 @@ export default function Upload() {
           <Text style={styles.label}>Kategori Foto</Text>
           <RNPickerSelect
             onValueChange={(value) => setCategoryPhoto(value)}
-            useNativeAndroidPickerStyle={false}
+            // useNativeAndroidPickerStyle={false}
             style={{
               inputAndroid: {
                 fontFamily: "Poppins-Regular",
@@ -419,7 +419,7 @@ export default function Upload() {
           <Text style={styles.label}>Tipe Foto</Text>
           <RNPickerSelect
             onValueChange={(value) => setTypePhoto(value)}
-            useNativeAndroidPickerStyle={false}
+            // useNativeAndroidPickerStyle={false}
             solution
             style={{
               inputAndroid: {

@@ -119,13 +119,12 @@ export default function Home({ navigation }) {
 
   const sheetRef = useRef(null);
   const sheetRefGIF = useRef(null);
+  const sheetRefPhoto = useRef(null);
 
   // Open Bottom Sheet
-  const openBottomSheetPhoto = (cardID, cardName, cardImage) => {
-    setSelectedCardID(cardID);
-    setSelectedCardName(cardName);
-    setSelectedCardImage(cardImage);
-    sheetRef.current?.open();
+  const openBottomSheetPhoto = (photoID) => {
+    setSelectedPhotoID(photoID);
+    sheetRefPhoto.current?.open();
   };
 
   const openBottomSheetGIF = (gifID) => {
@@ -214,8 +213,8 @@ export default function Home({ navigation }) {
         return (
           <>
             <RenderMasonryPhoto
-              gif={gifExample}
-              openBottomSheet={openBottomSheetPhoto}
+              gif={photo}
+              openBottomSheetPhoto={openBottomSheetPhoto}
               fetchData={fetchData}
             />
           </>
@@ -325,6 +324,12 @@ export default function Home({ navigation }) {
         ref={sheetRefGIF}
         height={685}
         id={selectedGIFID}
+        navigation={navigation}
+      />
+      <BottomSheetPhoto
+        ref={sheetRefPhoto}
+        height={685}
+        id={selectedPhotoID}
         navigation={navigation}
       />
     </>

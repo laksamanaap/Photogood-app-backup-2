@@ -40,8 +40,7 @@ const RenderMasonryList = ({ gif, gifID, openBottomSheetGIF, fetchData }) => {
       >
         <View style={{ flexDirection: "row", paddingBottom: 100 }}>
           <View style={{ flex: 1, flexDirection: "column" }}>
-            {oddItems.map((item, index) => {
-              console.log("item from odditems : ", item);
+            {evenItems.map((item, index) => {
               return (
                 <TouchableOpacity
                   key={index}
@@ -64,7 +63,8 @@ const RenderMasonryList = ({ gif, gifID, openBottomSheetGIF, fetchData }) => {
             })}
           </View>
           <View style={{ flex: 1, flexDirection: "column" }}>
-            {evenItems.map((item, index) => {
+            {oddItems.map((item, index) => {
+              console.log("item from odditems : ", item);
               return (
                 <TouchableOpacity
                   key={index}
