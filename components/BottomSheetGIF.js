@@ -706,8 +706,9 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   bottomSheetImage: {
-    borderRadius: 16,
+    borderRadius: 18,
     resizeMode: "cover",
+    objectFit: "cover",
     width: "100%",
     height: 200,
   },
