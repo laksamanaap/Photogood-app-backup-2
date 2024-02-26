@@ -371,10 +371,12 @@ const BottomSheetGIF = forwardRef(
           >
             <View style={styles.imageContainer}>
               {lokasi_file ? (
-                <Image
-                  source={{ uri: lokasi_file }}
-                  style={styles.bottomSheetImage}
-                />
+                <View style={{ borderRadius: 18, overflow: "hidden" }}>
+                  <Image
+                    source={{ uri: lokasi_file }}
+                    style={styles.bottomSheetImage}
+                  />
+                </View>
               ) : (
                 <Image
                   source={require("../assets/images/placeholder-image-3.png")}
@@ -711,6 +713,7 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     width: "100%",
     height: 200,
+    overlayColor: "white",
   },
   bottomSheetTop: {
     flexWrap: "wrap",
