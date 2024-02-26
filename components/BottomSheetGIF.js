@@ -713,7 +713,7 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     width: "100%",
     height: 200,
-    overlayColor: "white",
+    overlayColor: "#F7F2F9",
   },
   bottomSheetTop: {
     flexWrap: "wrap",
