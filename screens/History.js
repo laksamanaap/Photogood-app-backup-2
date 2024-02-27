@@ -134,9 +134,19 @@ export default function History() {
     );
   }
 
+  const handleSearchHistory = (results) => {
+    console.log(results, "RESULT FROM SEARCH RESULTS");
+
+    const likeHistory = results["Like History"];
+    setLikeData(likeHistory);
+
+    const downloadHistory = results["Download History"];
+    setDownloadData(downloadHistory);
+  };
+
   return (
     <View style={styles.container}>
-      <SearchHistory />
+      <SearchHistory onSearchResults={handleSearchHistory} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
