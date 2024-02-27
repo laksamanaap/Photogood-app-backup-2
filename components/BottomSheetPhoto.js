@@ -23,7 +23,6 @@ import Feather from "react-native-vector-icons/Feather";
 import Foundation from "react-native-vector-icons/Foundation";
 
 import * as MediaLibrary from "expo-media-library";
-import * as FileSystem from "expo-file-system";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";

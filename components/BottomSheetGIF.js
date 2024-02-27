@@ -24,7 +24,6 @@ import Foundation from "react-native-vector-icons/Foundation";
 
 // import { Permissions, MediaLibrary } from "expo";
 import * as MediaLibrary from "expo-media-library";
-import * as FileSystem from "expo-file-system";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";

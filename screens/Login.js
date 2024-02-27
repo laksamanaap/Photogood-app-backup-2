@@ -79,8 +79,16 @@ export default function Login(props) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View
+        style={{
+          marginTop: 80,
+          flexDirection: "column",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Image
           style={{
             width: 100,
@@ -145,59 +153,55 @@ export default function Login(props) {
             </Text>
           )}
         </TouchableOpacity>
-        <View>
-          <Text style={styles.OAuthDesc}>Atau masuk menggunakan</Text>
-        </View>
-        <View style={styles.OAuthContainer}>
-          <TouchableOpacity style={styles.OAuthButton}>
-            <AntDesign
-              name="google"
-              style={{ color: "#A9329D", fontSize: 20 }}
-            />
-            <Text
-              style={{
-                color: "black",
-                textAlign: "center",
-                fontSize: 16,
-                fontWeight: "500",
-                fontFamily: "Poppins-Regular",
-              }}
-            >
-              Google
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.OAuthContainer}>
-          <TouchableOpacity style={styles.OAuthButton}>
-            <AntDesign
-              name="facebook-square"
-              style={{ color: "#A9329D", fontSize: 20 }}
-            />
-            <Text
-              style={{
-                color: "black",
-                textAlign: "center",
-                fontSize: 16,
-                fontWeight: "500",
-                fontFamily: "Poppins-Regular",
-              }}
-            >
-              Facebook
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </TouchableWithoutFeedback>
+      </View>
+      {/* <View>
+        <Text style={styles.OAuthDesc}>Atau masuk menggunakan</Text>
+      </View>
+      <View style={styles.OAuthContainer}>
+        <TouchableOpacity style={styles.OAuthButton}>
+          <AntDesign name="google" style={{ color: "#A9329D", fontSize: 20 }} />
+          <Text
+            style={{
+              color: "black",
+              textAlign: "center",
+              fontSize: 16,
+              fontWeight: "500",
+              fontFamily: "Poppins-Regular",
+            }}
+          >
+            Google
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.OAuthContainer}>
+        <TouchableOpacity style={styles.OAuthButton}>
+          <AntDesign
+            name="facebook-square"
+            style={{ color: "#A9329D", fontSize: 20 }}
+          />
+          <Text
+            style={{
+              color: "black",
+              textAlign: "center",
+              fontSize: 16,
+              fontWeight: "500",
+              fontFamily: "Poppins-Regular",
+            }}
+          >
+            Facebook
+          </Text>
+        </TouchableOpacity>
+      </View> */}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
     backgroundColor: "white",
     alignItems: "center",
-    justifyContent: "center",
-    padding: 35,
+    padding: 32,
+    height: "100%",
   },
   inputContainer: {
     width: "100%",
