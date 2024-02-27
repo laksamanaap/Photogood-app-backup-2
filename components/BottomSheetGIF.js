@@ -345,7 +345,10 @@ const BottomSheetGIF = forwardRef(
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.bottomSheetButton}
-                onPress={storeUserLike}
+                onPress={() => {
+                  toggleLove();
+                  storeUserLike();
+                }}
               >
                 <AntDesign
                   name={"hearto"}

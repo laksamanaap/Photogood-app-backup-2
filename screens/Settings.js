@@ -178,7 +178,7 @@ const Settings = (props) => {
             <Entypo name="chevron-right" size={18} color={"#000000"} />
           </View>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.settingsCardSecondary}>
+        <TouchableOpacity style={styles.settingsCardSecondary}>
           <View style={styles.settinggsCardSecondaryContainer}>
             <View style={styles.settingsCardSecondaryIcon}>
               <AntDesign name="profile" size={18} color={"#A9329D"} />
@@ -188,7 +188,7 @@ const Settings = (props) => {
           <View style={styles.settingsCardSecondaryWrapper}>
             <Entypo name="chevron-right" size={18} color={"#000000"} />
           </View>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingsCardSecondary}
           onPress={() => navigation.navigate("Album")}

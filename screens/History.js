@@ -1,8 +1,38 @@
 import { Text, StyleSheet, View, Image, ScrollView } from "react-native";
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import SearchHistory from "../components/SearchHistory";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import client from "../utils/client";
 
 export default function History() {
+  const [downdloadData, setDownloadData] = useState(null);
+  const [likeData, setLikeData] = useState(null);
+
+  const fetchLikeData = async () => {
+    try {
+      const response = await client.get("/v1/show-user-like");
+      setLikeData(response?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchDownloadData = async () => {
+    try {
+      const response = await client.get("/v1/show-user-download");
+      setDownloadData(response?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDownloadData();
+    fetchLikeData();
+  }, []);
+
+  console.log(likeData, "LIKE DATA IN HISTORY");
+  console.log(downdloadData, "DOWNLOAD DATA IN HISTORY");
+
   return (
     <View style={styles.container}>
       <SearchHistory />

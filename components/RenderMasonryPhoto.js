@@ -49,7 +49,7 @@ const RenderMasonryList = ({ gif, photo, openBottomSheetPhoto, fetchData }) => {
                   <TouchableOpacity
                     key={index}
                     onPress={() =>
-                      openBottomSheetGIF(
+                      openBottomSheetPhoto(
                         item.foto_id,
                         item.judul_foto,
                         item.lokasi_file
@@ -73,7 +73,7 @@ const RenderMasonryList = ({ gif, photo, openBottomSheetPhoto, fetchData }) => {
                   <TouchableOpacity
                     key={index}
                     onPress={() =>
-                      openBottomSheetGIF(
+                      openBottomSheetPhoto(
                         item.foto_id,
                         item.judul_foto,
                         item.lokasi_file

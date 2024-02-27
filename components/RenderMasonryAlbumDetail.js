@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 8,
+    overlayColor: "#F2F2F2",
   },
 });
 
