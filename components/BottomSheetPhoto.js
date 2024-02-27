@@ -23,6 +23,7 @@ import Feather from "react-native-vector-icons/Feather";
 import Foundation from "react-native-vector-icons/Foundation";
 
 import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
@@ -38,7 +39,10 @@ const BottomSheetGIF = forwardRef(
     const [isMenuExpanded, setIsMenuExpanded] = useState(false);
 
     const [userData, setUserData] = useState(null);
+    const [userStatus, setUserStatus] = useState("1");
+    const [memberId, setMemberId] = useState(null);
     const [token, setToken] = useState(null);
+
     const [loading, setLoading] = useState(true);
     const [downloadLoading, setDownloadLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
@@ -140,6 +144,8 @@ const BottomSheetGIF = forwardRef(
         const response = await client.get(`v1/show-user-detail?token=${token}`);
         console.log("upload user detail : ", response?.data);
         setUserData(response?.data);
+        setUserStatus(response?.data.status);
+        setMemberId(response?.data?.member?.member_id);
       } catch (error) {
         console.error(error);
       } finally {
@@ -259,6 +265,41 @@ const BottomSheetGIF = forwardRef(
       }
     };
 
+    // Guest
+    const storeGuestDownload = async () => {
+      console.log("GUESTTT DOWNLOAD PHOTOOOOOOOOOOOOOOOO");
+      const payload = {
+        user_id: userData?.user_id,
+      };
+      try {
+        const response = await client.post(
+          `v3/download-photo/${foto_id}?token=${token}`,
+          payload
+        );
+        console.log(response?.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    // Member
+    const storeMemberDownload = async () => {
+      console.log("MEMBER DOWNLOAD PHOTOOOOOOOOOOOOOOOO");
+      const payload = {
+        member_id: memberId,
+        user_id: userData?.user_id,
+      };
+      try {
+        const response = await client.post(
+          `v4/download-photo/${foto_id}?token=${token}`,
+          payload
+        );
+        console.log(response?.data, "MEMBER DOWNLOAD PHOTOOOOOOOOOOOOOOOO");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const saveToGallery = async (lokasi_file, judul_foto) => {
       console.log(lokasi_file, "LOKASI FILE FOTO DOWNLOAD");
       setDownloadLoading(true);
@@ -285,6 +326,7 @@ const BottomSheetGIF = forwardRef(
       } catch (error) {
         Alert.alert("An error occured!", error.message);
         console.error(error);
+        setDownloadLoading(false);
       }
     };
 
@@ -386,7 +428,12 @@ const BottomSheetGIF = forwardRef(
                   <View style={styles.downloadIcons}>
                     <TouchableOpacity
                       style={styles.downloadIcon}
-                      onPress={() => saveToGallery(lokasi_file, judul_foto)}
+                      onPress={() => {
+                        saveToGallery(lokasi_file, judul_foto);
+                        userStatus === "2"
+                          ? storeMemberDownload()
+                          : storeGuestDownload();
+                      }}
                       disabled={downloadLoading}
                     >
                       {downloadLoading ? (

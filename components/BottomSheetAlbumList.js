@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 50,
     width: 50,
+    overlayColor: "white",
   },
   cardAlbumTextWrapper: {
     flexDirection: "column",
