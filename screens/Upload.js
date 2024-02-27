@@ -441,7 +441,7 @@ export default function Upload() {
             items={[
               { label: "GIF", value: "GIF" },
               { label: "Foto", value: "Photo" },
-              { label: "Photo", value: "Vector" },
+              { label: "Vector", value: "Vector" },
             ]}
           />
         </View>

@@ -207,6 +207,7 @@ export default function Home({ navigation }) {
             gif={gif}
             openBottomSheetGIF={openBottomSheetGIF}
             fetchData={fetchData}
+            navigation={navigation}
           />
         );
       case "foto":

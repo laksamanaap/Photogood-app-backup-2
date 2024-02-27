@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Text,
 } from "react-native";
 
 const RenderMasonryList = ({ gif, photo, openBottomSheetPhoto, fetchData }) => {
@@ -40,48 +41,77 @@ const RenderMasonryList = ({ gif, photo, openBottomSheetPhoto, fetchData }) => {
       }
     >
       <View style={{ flexDirection: "row", paddingBottom: 100 }}>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          {oddItems.map((item, index) => (
+        {evenItems.length > 0 || oddItems.length > 0 ? (
+          <>
+            <View style={{ flex: 1, flexDirection: "column" }}>
+              {evenItems.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() =>
+                      openBottomSheetGIF(
+                        item.foto_id,
+                        item.judul_foto,
+                        item.lokasi_file
+                      )
+                    }
+                  >
+                    <View style={[styles.card, { height: getRandomHeight() }]}>
+                      <Image
+                        source={{ uri: item.lokasi_file }}
+                        style={styles.image}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            <View style={{ flex: 1, flexDirection: "column" }}>
+              {oddItems.map((item, index) => {
+                console.log("item from odditems : ", item);
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() =>
+                      openBottomSheetGIF(
+                        item.foto_id,
+                        item.judul_foto,
+                        item.lokasi_file
+                      )
+                    }
+                  >
+                    <View style={[styles.card, { height: getRandomHeight() }]}>
+                      <Image
+                        source={{ uri: item.lokasi_file }}
+                        style={styles.image}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </>
+        ) : (
+          <View style={styles.notFoundWrapper}>
+            <Image
+              style={styles.notFoundImage}
+              source={require("../assets/images/404-not-found-unscreen.gif")}
+              resizeMode="contain"
+            />
+            <View style={styles.notFoundTextWrapper}>
+              <Text style={styles.notFoundTitle}>Foto tidak ditemukan</Text>
+              <Text style={styles.notFoundSubtitle}>
+                Jadilah orang pertama yang mengupload foto!
+              </Text>
+            </View>
             <TouchableOpacity
-              key={index}
-              onPress={() =>
-                openBottomSheetPhoto(
-                  item.foto_id,
-                  item.judul_foto,
-                  item.lokasi_file
-                )
-              }
+              style={styles.button}
+              onPress={() => navigation.navigate("Upload")}
             >
-              <View style={[styles.card, { height: getRandomHeight() }]}>
-                <Image
-                  source={{ uri: item.lokasi_file }}
-                  style={styles.image}
-                />
-              </View>
+              <Text style={styles.buttonText}>Unggah Foto</Text>
             </TouchableOpacity>
-          ))}
-        </View>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          {evenItems.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() =>
-                openBottomSheetPhoto(
-                  item.foto_id,
-                  item.judul_foto,
-                  item.lokasi_file
-                )
-              }
-            >
-              <View style={[styles.card, { height: getRandomHeight() }]}>
-                <Image
-                  source={{ uri: item.lokasi_file }}
-                  style={styles.image}
-                />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -97,6 +127,46 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  notFoundWrapper: {
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  notFoundTextWrapper: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  notFoundImage: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: 250,
+    height: 250,
+  },
+  notFoundTitle: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 20,
+  },
+  notFoundSubtitle: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
+  },
+  button: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#9548F7",
+    fontFamily: "Poppins-Regular",
+    marginTop: 16,
+    minWidth: 100,
+    padding: 8,
+    borderRadius: 50,
+  },
+  buttonText: {
+    fontFamily: "Poppins-Bold",
+    color: "#fff",
+    fontSize: 12,
   },
 });
 
