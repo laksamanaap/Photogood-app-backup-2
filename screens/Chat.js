@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import SearchRoom from "../components/SearchRoom";
@@ -20,6 +21,7 @@ export default function Chat({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [chatData, setChatData] = useState([]);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
   const sheetRef = useRef(null);
 
   const getTokenFromStorage = async () => {
@@ -44,6 +46,7 @@ export default function Chat({ navigation }) {
     try {
       const response = await client.get(`v1/show-all-room?token=${token}`);
       setChatData(response?.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -60,18 +63,20 @@ export default function Chat({ navigation }) {
     }
   };
 
-  const formatDate = (createdAt) => {
-    const formattedDate = moment(createdAt).format("HH:mm");
-
-    return formattedDate;
-  };
-
   useEffect(() => {
     getTokenFromStorage();
     fetchUserChat();
   }, []);
 
   console.log(chatData, "CHAT DATA ALL RESPONSEE");
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#A9329D" />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -95,7 +100,11 @@ export default function Chat({ navigation }) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          <ChatList chatData={chatData} navigation={navigation} />
+          <ChatList
+            chatData={chatData}
+            navigation={navigation}
+            onRefresh={onRefresh}
+          />
         </ScrollView>
       </View>
       <BottomSheetUI ref={sheetRef} height={625} onRefresh={onRefresh} />
@@ -140,5 +149,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     marginBottom: 24,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
