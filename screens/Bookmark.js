@@ -13,9 +13,13 @@ import {
 import React, { useState, useRef, useEffect } from "react";
 import RenderMasonryBookmark from "../components/RenderMasonryBookmark";
 import RenderMasonryBookmarkSaved from "../components/RenderMasonryBookmarkSaved";
+import RenderMasonryBookmarkLiked from "../components/RenderMasonryBookmarkLiked";
 import BottomSheetUI from "../components/BottomSheetUI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
+
+import Feather from "react-native-vector-icons/Feather";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 export default function Bookmark({ navigation }) {
   const [token, setToken] = useState(null);
@@ -35,6 +39,7 @@ export default function Bookmark({ navigation }) {
 
   const [post, setPost] = useState([]);
   const [saved, setSaved] = useState([]);
+  const [likeData, setLikeData] = useState(null);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -96,11 +101,22 @@ export default function Bookmark({ navigation }) {
     }
   };
 
+  const fetchLikeData = async () => {
+    try {
+      const response = await client.get(`/v1/show-user-like?token=${token}`);
+      setLikeData(response?.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getTokenFromStorage();
     fetchUserDetail();
     fetchUserPost();
     fetchUserBookmark();
+    fetchLikeData();
   }, []);
 
   const onRefresh = async () => {
@@ -109,6 +125,7 @@ export default function Bookmark({ navigation }) {
       await fetchUserDetail();
       await fetchUserPost();
       await fetchUserBookmark();
+      await fetchLikeData();
     } catch (error) {
       console.error("Error refreshing user detail:", error);
     } finally {
@@ -124,39 +141,62 @@ export default function Bookmark({ navigation }) {
     );
   }
 
-  // console.log(saved, "BOOKMARK SAVEDD");
-
   return (
     <>
       <View style={styles.container}>
-        {userData?.foto_profil ? (
-          <Image
-            source={{ uri: userData?.foto_profil }}
-            style={{
-              width: 120,
-              height: 120,
-              borderRadius: 100,
-              marginBottom: 15,
-            }}
-          />
-        ) : (
-          <Image
-            source={profileImage}
-            style={{
-              width: 120,
-              height: 120,
-              borderRadius: 100,
-              marginBottom: 15,
-            }}
-          />
-        )}
-        <View style={{ marginBottom: 20 }}>
-          <TouchableOpacity
-            style={[styles.tabButton]}
-            onPress={() => navigation.navigate("Profile")}
-          >
-            <Text style={styles.tabButtonText}>Edit Profil</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.settingsIcon}
+          onPress={() => navigation.navigate("Settings")}
+        >
+          <AntDesign name="setting" size={24} color={"white"} />
+        </TouchableOpacity>
+        <View style={styles.profileTopWrapper}>
+          <View style={styles.profileTopAvatar}>
+            {userData?.foto_profil ? (
+              <Image
+                source={{ uri: userData?.foto_profil }}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 100,
+                  marginBottom: 15,
+                }}
+              />
+            ) : (
+              <Image
+                source={profileImage}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 100,
+                  marginBottom: 15,
+                }}
+              />
+            )}
+            <TouchableOpacity
+              style={styles.profileTopIconWhite}
+              onPress={() => navigation.navigate("Profile")}
+            >
+              <View style={styles.profileTopIcon}>
+                <Feather name={"edit"} size={16} color={"white"} />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.textProfileTitle}>@{userData?.username}</Text>
+          <View style={styles.profileDetailWrapper}>
+            <View style={styles.profileDetail}>
+              <Text style={styles.profileDetailTitle}>{post?.length}</Text>
+              <Text style={styles.profileDetailSubtitle}>Postingan</Text>
+            </View>
+            <View style={styles.profileDetail}>
+              <Text style={styles.profileDetailTitle}>{saved?.length}</Text>
+              <Text style={styles.profileDetailSubtitle}>Disimpan</Text>
+            </View>
+            <View style={styles.profileDetail}>
+              <Text style={styles.profileDetailTitle}>{likeData?.length}</Text>
+              <Text style={styles.profileDetailSubtitle}>Disukai</Text>
+            </View>
+          </View>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -193,6 +233,23 @@ export default function Bookmark({ navigation }) {
               Disimpan
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === "liked" && styles.activeTabButton,
+            ]}
+            onPress={() => handleTabChange("liked")}
+          >
+            <Text
+              style={
+                activeTab === "liked"
+                  ? styles.tabButtonTextBold
+                  : styles.tabButtonText
+              }
+            >
+              Disukai
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView
@@ -213,9 +270,22 @@ export default function Bookmark({ navigation }) {
               </Text>
             </View>
           )
-        ) : saved.length > 0 ? (
-          <RenderMasonryBookmarkSaved
-            gif={saved}
+        ) : activeTab === "saved" ? (
+          saved.length > 0 ? (
+            <RenderMasonryBookmarkSaved
+              gif={saved}
+              openBottomSheet={openBottomSheet}
+            />
+          ) : (
+            <View style={styles.textWrapper}>
+              <Text style={styles.textBookmark}>
+                User belum menyukai apapun!
+              </Text>
+            </View>
+          )
+        ) : likeData.length > 0 ? (
+          <RenderMasonryBookmarkLiked
+            gif={likeData}
             openBottomSheet={openBottomSheet}
           />
         ) : (
@@ -242,6 +312,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     padding: 35,
     alignItems: "center",
+    position: "relative",
   },
   profileImage: {
     borderRadius: 50,
@@ -253,7 +324,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tabButton: {
-    minWidth: 150,
+    // minWidth: 150,
     alignItems: "center",
     backgroundColor: "#ECECEC",
     paddingVertical: 8,
@@ -291,5 +362,67 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     padding: 30,
+  },
+  textProfileTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins-Bold",
+  },
+  profileTopWrapper: {
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  profileDetailWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 16,
+    gap: 16,
+  },
+  profileDetail: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  profileDetailTitle: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 18,
+  },
+  profileDetailSubtitle: {
+    fontFamily: "Poppins-Regular",
+    color: "#949494",
+  },
+  profileTopAvatar: {
+    position: "relative",
+  },
+  profileTopIconWhite: {
+    backgroundColor: "#F2F2F2",
+    borderRadius: 50,
+    width: 35,
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    maxWidth: 45,
+    position: "absolute",
+    bottom: 10,
+    right: 0,
+  },
+  profileTopIcon: {
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#A9329D",
+    padding: 6,
+    borderRadius: 50,
+  },
+  settingsIcon: {
+    backgroundColor: "#A9329D",
+    borderRadius: 50,
+    width: 35,
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    maxWidth: 45,
+    position: "absolute",
+    right: 25,
+    top: 15,
   },
 });

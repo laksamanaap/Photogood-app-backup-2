@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 import {
   View,
   Platform,
@@ -28,6 +31,10 @@ import Settings from "../screens/Settings";
 import Membership from "../screens/Membership";
 import Album from "../screens/Album";
 import AlbumDetail from "../screens/AlbumDetail";
+import Chat from "../screens/Chat";
+import ChatDetail from "../screens/ChatDetail";
+
+// import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,12 +91,12 @@ const MainTabs = ({ handleLogout }) => {
         }}
       />
       <Tab.Screen
-        name="History"
-        component={History}
+        name="Chat"
+        component={Chat}
         options={{
           tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="profile"
+            <MaterialCommunityIcons
+              name="message-processing-outline"
               size={25}
               color={focused ? "#A9329D" : "#111"}
             />
@@ -123,28 +130,29 @@ const MainTabs = ({ handleLogout }) => {
         }}
       />
       <Tab.Screen
-        name="Bookmark"
-        component={Bookmark}
+        name="Album"
+        component={Album}
         options={{
           tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="bookmark-o"
+            <Feather
+              name="image"
               size={25}
               color={focused ? "#A9329D" : "#111"}
             />
           ),
         }}
       />
+
       <Tab.Screen
-        name="Settings"
-        component={Settings}
+        name="ProfileDetail"
+        component={Bookmark}
         initialParams={{ handleLogout: handleLogout }}
         options={({ route }) => ({
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <AntDesign
-                name="setting"
-                size={28}
+              <Ionicons
+                name="person-circle-outline"
+                size={30}
                 color={focused ? "#A9329D" : "#111"}
               />
             </View>
@@ -234,6 +242,25 @@ const App = (props) => {
             component={Album}
           />
           <Stack.Screen
+            name="Settings"
+            component={Settings}
+            initialParams={{ handleLogout: handleLogout }}
+            options={({ route }) => ({
+              tabBarIcon: ({ focused }) => (
+                <View
+                  style={{ alignItems: "center", justifyContent: "center" }}
+                >
+                  <Ionicons
+                    name="person-circle-outline"
+                    size={30}
+                    color={focused ? "#A9329D" : "#111"}
+                  />
+                </View>
+              ),
+              handleLogout: route.params.handleLogout,
+            })}
+          />
+          <Stack.Screen
             options={({ navigation }) => ({
               title: null,
               headerShown: false,
@@ -248,6 +275,19 @@ const App = (props) => {
             })}
             name="Membership"
             component={Membership}
+          />
+          <Stack.Screen
+            name="History"
+            component={History}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <AntDesign
+                  name="profile"
+                  size={25}
+                  color={focused ? "#A9329D" : "#111"}
+                />
+              ),
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

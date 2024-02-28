@@ -155,7 +155,10 @@ export default function Album({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 30 },
+  container: {
+    padding: 30,
+    marginTop: 48,
+  },
   albumTitle: {
     fontSize: 18,
     fontFamily: "Poppins-Bold",
