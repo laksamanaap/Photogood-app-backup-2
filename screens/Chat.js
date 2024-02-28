@@ -5,13 +5,16 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  RefreshControl,
 } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import SearchRoom from "../components/SearchRoom";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import BottomSheetUI from "../components/BottomSheetChat";
+import ChatList from "../components/ChatList";
 import client from "../utils/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment";
 
 export default function Chat() {
   const [refreshing, setRefreshing] = useState(false);
@@ -37,16 +40,6 @@ export default function Chat() {
     sheetRef.current?.open();
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    try {
-    } catch (error) {
-      console.error("Error refreshing user detail:", error);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
   const fetchUserChat = async () => {
     try {
       const response = await client.get(`v1/show-all-room?token=${token}`);
@@ -56,7 +49,25 @@ export default function Chat() {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchUserChat();
+    } catch (error) {
+      console.error("Error refreshing user detail:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const formatDate = (createdAt) => {
+    const formattedDate = moment(createdAt).format("HH:mm");
+
+    return formattedDate;
+  };
+
   useEffect(() => {
+    getTokenFromStorage();
     fetchUserChat();
   }, []);
 
@@ -75,49 +86,16 @@ export default function Chat() {
           </TouchableOpacity>
         </View>
         <SearchRoom onSearchResults={handleSearchRoom} />
-        <ScrollView contentContainerStyle={{ marginTop: 32 }}>
-          {chatData?.length > 0 ? (
-            chatData?.map((chat, index) => (
-              <TouchableOpacity style={styles.chatAvatarContainer} key={index}>
-                <View style={styles.chatAvatarWrapper}>
-                  {chat?.profil_ruang ? (
-                    <Image
-                      source={{ uri: chat?.profil_ruang }}
-                      style={styles.chatAvatar}
-                    />
-                  ) : (
-                    <Image
-                      source={require("../assets/images/placeholder-image-3.png")}
-                      style={styles.chatAvatar}
-                    />
-                  )}
-                  <View>
-                    <Text style={styles.chatAvatarTitle}>
-                      {chat?.nama_ruang}
-                    </Text>
-                    <Text style={styles.chatAvatarSubtitle}>
-                      {chat?.lastMessage ? (
-                        <Text>al</Text>
-                      ) : (
-                        <Text>
-                          {chat?.owner?.username} Baru saja membuat grup ini
-                        </Text>
-                      )}
-                    </Text>
-                  </View>
-                </View>
-                <Text style={[styles.chatAvatarSubtitle, { marginTop: 4 }]}>
-                  {chat?.lastMessage ? (
-                    <Text>Last Message</Text>
-                  ) : (
-                    <Text>{chat?.created_at}</Text>
-                  )}
-                </Text>
-              </TouchableOpacity>
-            ))
-          ) : (
-            <Text>Takde chat</Text>
-          )}
+        <ScrollView
+          contentContainerStyle={{
+            marginTop: 32,
+            marginBottom: 48,
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <ChatList chatData={chatData} />
         </ScrollView>
       </View>
       <BottomSheetUI ref={sheetRef} height={625} onRefresh={onRefresh} />
@@ -137,6 +115,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 30,
+    marginBottom: 30,
   },
   chatAvatar: {
     width: 50,
@@ -160,6 +139,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 20,
+    marginBottom: 24,
   },
 });

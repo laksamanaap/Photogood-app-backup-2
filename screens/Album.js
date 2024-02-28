@@ -57,7 +57,7 @@ export default function Album({ navigation }) {
     } catch (error) {
       console.log(error, "Error Album");
       setLoading(false);
-      if (error?.response.status === 401) {
+      if (error?.response?.status === 401) {
         setLoading(true);
         Alert.alert(
           "An error occurred!",
