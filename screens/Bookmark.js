@@ -291,7 +291,7 @@ export default function Bookmark({ navigation }) {
         ) : (
           <View style={styles.textWrapper}>
             <Text style={styles.textBookmark}>
-              User belum menyimpan apapun!
+              User belum menyukai siapapun! (mati rasa)
             </Text>
           </View>
         )}
@@ -397,8 +397,8 @@ const styles = StyleSheet.create({
   profileTopIconWhite: {
     backgroundColor: "#F2F2F2",
     borderRadius: 50,
-    width: 35,
-    height: 35,
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
     maxWidth: 45,
