@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import moment from "moment";
 
-export default function ChatList({ chatData }) {
+export default function ChatList({ chatData, navigation }) {
   const formatDate = (createdAt) => {
     const formattedDate = moment(createdAt).format("HH:mm");
 
@@ -13,7 +13,11 @@ export default function ChatList({ chatData }) {
     <>
       {chatData?.length > 0 ? (
         chatData?.map((chat, index) => (
-          <TouchableOpacity style={styles.chatAvatarContainer} key={index}>
+          <TouchableOpacity
+            style={styles.chatAvatarContainer}
+            key={index}
+            onPress={() => navigation.navigate("ChatDetail")}
+          >
             <View style={styles.chatAvatarWrapper}>
               {chat?.profil_ruang ? (
                 <Image

@@ -289,6 +289,19 @@ const App = (props) => {
               ),
             }}
           />
+          <Stack.Screen
+            name="ChatDetail"
+            component={ChatDetail}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <AntDesign
+                  name="profile"
+                  size={25}
+                  color={focused ? "#A9329D" : "#111"}
+                />
+              ),
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </KeyboardAvoidingView>

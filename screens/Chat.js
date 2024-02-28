@@ -16,7 +16,7 @@ import client from "../utils/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 
-export default function Chat() {
+export default function Chat({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [chatData, setChatData] = useState([]);
   const [token, setToken] = useState(null);
@@ -95,7 +95,7 @@ export default function Chat() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          <ChatList chatData={chatData} />
+          <ChatList chatData={chatData} navigation={navigation} />
         </ScrollView>
       </View>
       <BottomSheetUI ref={sheetRef} height={625} onRefresh={onRefresh} />
