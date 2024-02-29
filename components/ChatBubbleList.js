@@ -10,20 +10,26 @@ import {
 import React, { useState } from "react";
 import ChatBubble from "./ChatBubble";
 
-export default function ChatBubbleList({ chatData, onRefresh }) {
+export default function ChatBubbleList({
+  chatData,
+  onRefresh,
+  join,
+  lastMember,
+}) {
   console.log(chatData, "CHAT DATA FROM CHAT DETAIL");
   const [refreshing, setRefreshing] = useState(false);
 
   return (
     <>
-      <ScrollView
-      // refreshControl={
-      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      // }
-      >
+      <ScrollView>
         {chatData?.length > 0 ? (
           chatData.map((message, index) => (
-            <ChatBubble key={index} message={message} />
+            <ChatBubble
+              key={index}
+              message={message}
+              join={join}
+              lastMember={lastMember}
+            />
           ))
         ) : (
           <Text>Gada</Text>

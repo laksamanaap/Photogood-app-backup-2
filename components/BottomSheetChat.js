@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   imagePreview: {
-    maxWidth: 320,
+    // maxWidth: 320,
     height: 200,
     marginBottom: 30,
     borderWidth: 2,

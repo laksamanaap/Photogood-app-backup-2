@@ -28,6 +28,7 @@ export default function ChatDetail({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [join, setJoin] = useState(false);
+  const [textInputDisabled, setTextInputDisabled] = useState(false);
 
   console.log(ruang_id, "ID RUANGAAN COK SUMPEK AKU");
 
@@ -35,7 +36,7 @@ export default function ChatDetail({ navigation }) {
     fetchRoomDetail();
     const interval = setInterval(() => {
       fetchRoomDetail();
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);
@@ -117,6 +118,8 @@ export default function ChatDetail({ navigation }) {
 
   const storeUserChat = async () => {
     try {
+      setMessageText("");
+      setTextInputDisabled(true);
       const payload = {
         isi_pesan: messageText,
         ruang_id: ruang_id,
@@ -133,6 +136,10 @@ export default function ChatDetail({ navigation }) {
       onRefresh();
     } catch (error) {
       console.error(error);
+    } finally {
+      setTimeout(() => {
+        setTextInputDisabled(false);
+      }, 4000);
     }
   };
 
@@ -147,6 +154,7 @@ export default function ChatDetail({ navigation }) {
         payload
       );
       console.log(response?.data, "RESPONSE DARI ROOMMM");
+      setJoin(true);
     } catch (error) {
       console.error(error);
     }
@@ -157,6 +165,16 @@ export default function ChatDetail({ navigation }) {
     fetchUserDetail();
     // fetchRoomDetailFresh();
   }, []);
+
+  useEffect(() => {
+    const hideBubbleTimeout = setTimeout(() => {
+      setJoin(false);
+    }, 6500);
+
+    return () => clearTimeout(hideBubbleTimeout);
+  }, [join]);
+
+  const lastMember = roomData?.member?.[roomData.member.length - 1];
 
   console.log(messageText, "MESSAGE TEXTTTTTTTTTTTTTTT");
   console.log(roomData, "ROOM DATA RESPONSE DETAIL");
@@ -232,7 +250,12 @@ export default function ChatDetail({ navigation }) {
       </View>
       <ScrollView>
         {roomData?.messages.length > 0 ? (
-          <ChatBubbleList chatData={roomData?.messages} onRefresh={onRefresh} />
+          <ChatBubbleList
+            chatData={roomData?.messages}
+            onRefresh={onRefresh}
+            join={join}
+            lastMember={lastMember}
+          />
         ) : (
           <View
             style={{
@@ -263,6 +286,38 @@ export default function ChatDetail({ navigation }) {
             </View>
           </View>
         )}
+        {join && (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              maxWidth: "100%",
+              marginTop: 12,
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                backgroundColor: "white",
+                padding: 8,
+                borderRadius: 20,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#000000",
+                  textAlign: "center",
+                  fontFamily: "Poppins-Regular",
+                  fontSize: 12,
+                }}
+              >
+                {`Anda baru saja memasuki grup ini`}
+              </Text>
+            </View>
+          </View>
+        )}
       </ScrollView>
       {!roomData?.member ||
       !roomData.member.some(
@@ -274,10 +329,11 @@ export default function ChatDetail({ navigation }) {
       ) : (
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { opacity: textInputDisabled ? 0.2 : 1 }]}
             placeholder="Ketik pesan Anda di sini..."
             value={messageText}
             onChangeText={handleMessageText}
+            editable={!textInputDisabled}
           />
           <TouchableOpacity style={styles.sendButton} onPress={storeUserChat}>
             <Text style={styles.sendButtonText}>Kirim</Text>

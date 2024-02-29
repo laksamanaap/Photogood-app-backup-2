@@ -63,88 +63,90 @@ export default function ChatBubble({ message }) {
   }, []);
 
   return (
-    <View style={[styles.container, { flexDirection }]}>
-      <Image
-        source={imageSource}
-        style={[
-          styles.userAvatar,
-          userImageAlignment,
-          {
-            marginLeft: isCurrentUser ? 0 : 16,
-            marginRight: isCurrentUser ? 16 : 0,
-          },
-        ]}
-      />
-      <View
-        style={[
-          styles.messageContainer,
-          {
-            backgroundColor: isCurrentUser ? "#A9329D" : "#FFFFFF",
-            borderRadius: 16,
-            marginRight: isCurrentUser ? 8 : 0,
-            marginLeft: isCurrentUser ? 0 : 8,
-            marginTop: 8,
-          },
-        ]}
-      >
+    <>
+      <View style={[styles.container, { flexDirection }]}>
+        <Image
+          source={imageSource}
+          style={[
+            styles.userAvatar,
+            userImageAlignment,
+            {
+              marginLeft: isCurrentUser ? 0 : 16,
+              marginRight: isCurrentUser ? 16 : 0,
+            },
+          ]}
+        />
         <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+          style={[
+            styles.messageContainer,
+            {
+              backgroundColor: isCurrentUser ? "#A9329D" : "#FFFFFF",
+              borderRadius: 16,
+              marginRight: isCurrentUser ? 8 : 0,
+              marginLeft: isCurrentUser ? 0 : 8,
+              marginTop: 8,
+            },
+          ]}
         >
-          {!isCurrentUser ? (
-            <Text
-              style={{
-                fontFamily: "Poppins-Bold",
-                color: isCurrentUser ? "white" : "black",
-                fontSize: 13,
-              }}
-            >
-              {message?.user?.username}
-            </Text>
-          ) : (
-            <Text
-              style={{
-                fontFamily: "Poppins-Bold",
-                color: isCurrentUser ? "white" : "black",
-                fontSize: 13,
-              }}
-            >
-              Anda
-            </Text>
-          )}
-          <Text
+          <View
             style={{
-              fontFamily: "Poppins-Regular",
-              color: isCurrentUser ? "white" : "black",
-              fontSize: 10,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            {formatDate(message?.created_at)}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text
+            {!isCurrentUser ? (
+              <Text
+                style={{
+                  fontFamily: "Poppins-Bold",
+                  color: isCurrentUser ? "white" : "black",
+                  fontSize: 13,
+                }}
+              >
+                {message?.user?.username}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontFamily: "Poppins-Bold",
+                  color: isCurrentUser ? "white" : "black",
+                  fontSize: 13,
+                }}
+              >
+                Anda
+              </Text>
+            )}
+            <Text
+              style={{
+                fontFamily: "Poppins-Regular",
+                color: isCurrentUser ? "white" : "black",
+                fontSize: 10,
+              }}
+            >
+              {formatDate(message?.created_at)}
+            </Text>
+          </View>
+          <View
             style={{
-              color: isCurrentUser ? "white" : "black",
-              fontFamily: "Poppins-Regular",
-              fontSize: 11,
-              textAlign: "left",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            {message.isi_pesan}
-          </Text>
+            <Text
+              style={{
+                color: isCurrentUser ? "white" : "black",
+                fontFamily: "Poppins-Regular",
+                fontSize: 11,
+                textAlign: "left",
+              }}
+            >
+              {message.isi_pesan}
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 
