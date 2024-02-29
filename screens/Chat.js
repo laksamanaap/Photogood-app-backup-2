@@ -38,7 +38,7 @@ export default function Chat({ navigation }) {
 
   const handleSearchRoom = (results) => {};
 
-  const openBottomSheet = (cardID, cardName, cardImage) => {
+  const openBottomSheet = () => {
     sheetRef.current?.open();
   };
 
@@ -104,6 +104,7 @@ export default function Chat({ navigation }) {
             chatData={chatData}
             navigation={navigation}
             onRefresh={onRefresh}
+            openBottomSheet={openBottomSheet}
           />
         </ScrollView>
       </View>

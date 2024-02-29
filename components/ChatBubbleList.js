@@ -17,10 +17,9 @@ export default function ChatBubbleList({ chatData, onRefresh }) {
   return (
     <>
       <ScrollView
-        style={{ marginTop: 24 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+      // refreshControl={
+      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      // }
       >
         {chatData?.length > 0 ? (
           chatData.map((message, index) => (

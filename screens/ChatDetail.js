@@ -6,6 +6,8 @@ import {
   ScrollView,
   Image,
   TextInput,
+  ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -23,9 +25,20 @@ export default function ChatDetail({ navigation }) {
   const [token, setToken] = useState(null);
   const [roomData, setRoomData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [join, setJoin] = useState(false);
 
   console.log(ruang_id, "ID RUANGAAN COK SUMPEK AKU");
+
+  useEffect(() => {
+    fetchRoomDetail();
+    const interval = setInterval(() => {
+      fetchRoomDetail();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getTokenFromStorage = async () => {
     try {
@@ -60,8 +73,34 @@ export default function ChatDetail({ navigation }) {
       );
       console.log(response?.data, "RUANGAN DETAILLLLLLLLLLLLL");
       setRoomData(response?.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fethcing room detail : ", error);
+    }
+  };
+
+  const fetchRoomDetailFresh = async () => {
+    try {
+      const response = await client.get(
+        `v1/show-room-messages?token=${token}&ruang_id=${ruang_id}`
+      );
+      console.log(response?.data, "RUANGAN DETAILLLLLLLLLLLLL");
+      setRoomData(response?.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fethcing room detail : ", error);
+    }
+  };
+
+  const onRefreshSec = async () => {
+    setRefreshing(true);
+    setLoading(true);
+    try {
+      await fetchRoomDetailFresh();
+    } catch (error) {
+      console.error("Error refreshing user detail:", error);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -97,13 +136,38 @@ export default function ChatDetail({ navigation }) {
     }
   };
 
+  const joinRoom = async () => {
+    try {
+      const payload = {
+        ruang_id: roomData?.ruang_id,
+        user_id: String(userData?.user_id),
+      };
+      const response = await client.post(
+        `v1/join-room?token=${token}`,
+        payload
+      );
+      console.log(response?.data, "RESPONSE DARI ROOMMM");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getTokenFromStorage();
     fetchUserDetail();
-    fetchRoomDetail();
+    // fetchRoomDetailFresh();
   }, []);
 
   console.log(messageText, "MESSAGE TEXTTTTTTTTTTTTTTT");
+  console.log(roomData, "ROOM DATA RESPONSE DETAIL");
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#A9329D" />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -119,7 +183,11 @@ export default function ChatDetail({ navigation }) {
           shadowRadius: 4,
           elevation: 5,
           backgroundColor: "#fff",
+          marginBottom: 16,
         }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefreshSec} />
+        }
       >
         <View style={styles.topContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -166,20 +234,56 @@ export default function ChatDetail({ navigation }) {
         {roomData?.messages.length > 0 ? (
           <ChatBubbleList chatData={roomData?.messages} onRefresh={onRefresh} />
         ) : (
-          <Text>gaenek</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                backgroundColor: "white",
+                width: "70%",
+                padding: 4,
+                borderRadius: 16,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#000000",
+                  textAlign: "center",
+                  fontFamily: "Poppins-Regular",
+                }}
+              >
+                {roomData?.owner?.username} baru saja membuat grup ini
+              </Text>
+            </View>
+          </View>
         )}
       </ScrollView>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Ketik pesan Anda di sini..."
-          value={messageText}
-          onChangeText={handleMessageText}
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={storeUserChat}>
-          <Text style={styles.sendButtonText}>Kirim</Text>
+      {!roomData?.member ||
+      !roomData.member.some(
+        (member) => member.user_id === userData?.user_id
+      ) ? (
+        <TouchableOpacity style={styles.joinButton} onPress={joinRoom}>
+          <Text style={styles.joinButtonText}>Join Room</Text>
         </TouchableOpacity>
-      </View>
+      ) : (
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Ketik pesan Anda di sini..."
+            value={messageText}
+            onChangeText={handleMessageText}
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={storeUserChat}>
+            <Text style={styles.sendButtonText}>Kirim</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </>
   );
 }
@@ -242,5 +346,21 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "Poppins-Bold",
     fontSize: 14,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  joinButton: {
+    backgroundColor: "#A9329D",
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 14,
+  },
+  joinButtonText: {
+    color: "white",
+    fontFamily: "Poppins-Bold",
+    fontSize: 16,
   },
 });

@@ -408,10 +408,14 @@ export default function Upload() {
               },
             }}
             items={[
-              { label: "Hewan", value: "1" },
-              { label: "Alam", value: "2" },
-              { label: "Laut", value: "3" },
-              { label: "Lucu", value: "4" },
+              { label: "Alam dan pemandangan", value: "1" },
+              { label: "Potret dan orang", value: "2" },
+              { label: "Hewan dan satwa liar", value: "3" },
+              { label: "Arsitektur", value: "4" },
+              { label: "Makanan dan minuman", value: "5" },
+              { label: "Objek dan produk", value: "6" },
+              { label: "Kesenian dan budaya", value: "7" },
+              { label: "Transportasi", value: "8" },
             ]}
           />
         </View>
@@ -420,7 +424,7 @@ export default function Upload() {
           <RNPickerSelect
             onValueChange={(value) => setTypePhoto(value)}
             // useNativeAndroidPickerStyle={false}
-            solution
+            // solution
             style={{
               inputAndroid: {
                 fontFamily: "Poppins-Regular",

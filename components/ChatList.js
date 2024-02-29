@@ -2,7 +2,12 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import moment from "moment";
 
-export default function ChatList({ chatData, navigation, onRefresh }) {
+export default function ChatList({
+  chatData,
+  navigation,
+  onRefresh,
+  openBottomSheet,
+}) {
   const formatDate = (createdAt) => {
     const formattedDate = moment(createdAt).format("HH:mm");
 
@@ -52,7 +57,7 @@ export default function ChatList({ chatData, navigation, onRefresh }) {
                     </Text>
                   ) : (
                     <Text style={{ color: "#7C7C7C" }}>
-                      {chat?.owner?.username} Baru saja membuat grup ini
+                      {chat?.owner?.username} baru saja membuat grup ini
                     </Text>
                   )}
                 </Text>
@@ -72,7 +77,28 @@ export default function ChatList({ chatData, navigation, onRefresh }) {
           </TouchableOpacity>
         ))
       ) : (
-        <Text>Takde chat</Text>
+        <View style={styles.textWrapper}>
+          <Text style={styles.textBookmark}>
+            Ruang diskusi kosong!. Tambah ruang untuk memulai!
+          </Text>
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => openBottomSheet()}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  fontSize: 14,
+                  fontFamily: "Poppins-Regular",
+                }}
+              >
+                Tambah Ruang
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
     </>
   );
@@ -102,5 +128,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     marginBottom: 24,
+  },
+  textBookmark: {
+    fontFamily: "Poppins-Bold",
+    textAlign: "center",
+  },
+  textWrapper: {
+    flexDirection: "column",
+    justifyContent: "center",
+    padding: 30,
+    gap: 16,
+  },
+  button: {
+    width: "50%",
+    backgroundColor: "#A9329D",
+    padding: 4,
+    borderRadius: 50,
+  },
+  buttonWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });

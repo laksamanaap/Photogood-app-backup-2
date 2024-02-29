@@ -56,9 +56,9 @@ const BottomSheetUI = forwardRef(({ height, onRefresh }, ref) => {
   const [userData, setUserData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [formData, setFormData] = useState({
-    namaAlbum: "",
-    deskripsiAlbum: "",
+  const [roomData, setRoomData] = useState({
+    nama_ruang: "",
+    deskripsi_ruang: "",
   });
 
   const getTokenFromStorage = async () => {
@@ -85,12 +85,59 @@ const BottomSheetUI = forwardRef(({ height, onRefresh }, ref) => {
     }
   };
 
+  const storeNewRoom = async () => {
+    try {
+      const formData = new FormData();
+
+      const imageUriParts = image.split(".");
+      const imageExtension = imageUriParts[imageUriParts.length - 1];
+      const imageType = `image/${imageExtension}`;
+
+      if (
+        imageType === "image/jpeg" ||
+        imageType === "image/png" ||
+        imageType === "image/jpg" ||
+        imageType === "image/gif" ||
+        imageType === "image/svg"
+      ) {
+        formData.append("profil_ruang", {
+          uri: image,
+          name: "photo.jpg",
+          type: imageType,
+        });
+      } else {
+        Alert.alert("Error", "Only image files are allowed.");
+        return;
+      }
+
+      formData.append("nama_ruang", roomData?.nama_ruang);
+      formData.append("deskripsi_ruang", roomData?.deskripsi_ruang);
+      formData.append("user_id", userData?.user_id);
+
+      const responseRoomDiscuss = await client.post(
+        "/v1/create-room",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(responseRoomDiscuss, "ROOM DISCUSS RESPONSEEE");
+      onRefresh();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getTokenFromStorage();
     fetchUserDetail();
   }, []);
 
-  console.log(formData, "BOTTOM SHEET ALBUM DATA FORM VALUE : ");
+  console.log(roomData, "BOTTOM SHEET ALBUM DATA FORM VALUE : ");
 
   return (
     <BottomSheet
@@ -132,9 +179,9 @@ const BottomSheetUI = forwardRef(({ height, onRefresh }, ref) => {
             <TextInput
               style={styles.input}
               placeholder="Nama Ruang"
-              value={formData.namaAlbum}
+              value={roomData.nama_ruang}
               onChangeText={(text) =>
-                setFormData({ ...formData, namaAlbum: text })
+                setRoomData({ ...roomData, nama_ruang: text })
               }
             />
           </View>
@@ -143,9 +190,9 @@ const BottomSheetUI = forwardRef(({ height, onRefresh }, ref) => {
             <TextInput
               style={styles.input}
               placeholder="Deskripsi Ruang"
-              value={formData.deskripsiAlbum}
+              value={roomData.deskripsi_ruang}
               onChangeText={(text) =>
-                setFormData({ ...formData, deskripsiAlbum: text })
+                setRoomData({ ...roomData, deskripsi_ruang: text })
               }
             />
           </View>
@@ -156,6 +203,7 @@ const BottomSheetUI = forwardRef(({ height, onRefresh }, ref) => {
               styles.button,
               { backgroundColor: isLoading ? "#ccc" : "#A9329D" },
             ]}
+            onPress={storeNewRoom}
           >
             <Text style={styles.buttonText}>Buat Ruang</Text>
           </TouchableOpacity>
