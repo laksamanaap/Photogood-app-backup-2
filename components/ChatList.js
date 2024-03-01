@@ -109,6 +109,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+    overlayColor: "#F2F2F2",
+    backgroundColor: "#F2F2F2",
   },
   chatAvatarWrapper: {
     flexDirection: "row",
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     marginBottom: 24,
+    backgroundColor: "#F2F2F2",
   },
   textBookmark: {
     fontFamily: "Poppins-Bold",

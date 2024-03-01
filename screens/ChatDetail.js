@@ -335,7 +335,14 @@ export default function ChatDetail({ navigation }) {
             onChangeText={handleMessageText}
             editable={!textInputDisabled}
           />
-          <TouchableOpacity style={styles.sendButton} onPress={storeUserChat}>
+          <TouchableOpacity
+            style={[
+              styles.sendButton,
+              { opacity: textInputDisabled ? 0.2 : 1 },
+            ]}
+            onPress={storeUserChat}
+            disabled={textInputDisabled}
+          >
             <Text style={styles.sendButtonText}>Kirim</Text>
           </TouchableOpacity>
         </View>
@@ -360,6 +367,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 50,
+    overlayColor: "white",
   },
   AlbumTitle: {
     fontFamily: "Poppins-Bold",
