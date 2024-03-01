@@ -74,8 +74,8 @@ const BottomSheetUI = forwardRef(
                     <Image
                       source={{ uri: image }}
                       style={{
-                        width: 160,
-                        height: 160,
+                        width: 135,
+                        height: 135,
                         borderRadius: 100,
                         marginBottom: 15,
                       }}
@@ -84,8 +84,8 @@ const BottomSheetUI = forwardRef(
                     <Image
                       source={{ uri: userData.foto_profil }}
                       style={{
-                        width: 160,
-                        height: 160,
+                        width: 135,
+                        height: 135,
                         borderRadius: 100,
                         marginBottom: 15,
                       }}
@@ -127,11 +127,13 @@ const BottomSheetUI = forwardRef(
                     justifyContent: "center",
                     alignItems: "center",
                     gap: 4,
+                    marginTop: 4,
                   }}
                 >
                   <Text
                     style={{
                       fontFamily: "Poppins-Regular",
+                      fontSize: 13,
                     }}
                   >
                     Ruang Diskusi - 1 Member
@@ -143,6 +145,23 @@ const BottomSheetUI = forwardRef(
                       color="#A9329D"
                     />
                   </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Poppins-Regular",
+                      fontSize: 13,
+                      color: "#7C7C7C",
+                    }}
+                  >
+                    Dibuat oleh laksa, 14/12/05, 20.08
+                  </Text>
                 </View>
                 <View style={{ width: "100%", marginTop: 30 }}>
                   <View style={styles.inputContainer}>
@@ -206,7 +225,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: "Poppins-Regular",
     color: "#fff",
-    fontSize: 12,
+    fontSize: 14,
   },
   inputContainer: {
     width: "100%",
@@ -228,8 +247,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   imagePreview: {
-    width: 160,
-    height: 160,
+    width: 135,
+    height: 135,
     borderWidth: 2,
     borderRadius: 100,
     padding: 10,
@@ -243,7 +262,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "rgba(169, 50, 157, 0.60)",
     top: 10,
-    right: 8,
+    right: 5,
     padding: 8,
     borderRadius: 24,
   },
