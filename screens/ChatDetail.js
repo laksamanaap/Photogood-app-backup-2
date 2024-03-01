@@ -12,6 +12,7 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
+import BottomSheetDetailRoom from "../components/BottomSheetDetailRoom";
 import ChatBubbleList from "../components/ChatBubbleList";
 import { useRoute } from "@react-navigation/native";
 
@@ -28,9 +29,16 @@ export default function ChatDetail({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [join, setJoin] = useState(false);
+  const [leave, setLeave] = useState(false);
+
   const [textInputDisabled, setTextInputDisabled] = useState(false);
+  const sheetRef = useRef(null);
 
   console.log(ruang_id, "ID RUANGAAN COK SUMPEK AKU");
+
+  const openBottomSheet = () => {
+    sheetRef.current?.open();
+  };
 
   useEffect(() => {
     fetchRoomDetail();
@@ -169,7 +177,7 @@ export default function ChatDetail({ navigation }) {
   useEffect(() => {
     const hideBubbleTimeout = setTimeout(() => {
       setJoin(false);
-    }, 6500);
+    }, 7000);
 
     return () => clearTimeout(hideBubbleTimeout);
   }, [join]);
@@ -241,7 +249,10 @@ export default function ChatDetail({ navigation }) {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={{ marginTop: 52, marginRight: 16 }}>
+        <TouchableOpacity
+          style={{ marginTop: 52, marginRight: 16 }}
+          onPress={() => openBottomSheet()}
+        >
           <Feather
             name={"more-horizontal"}
             style={{ color: "#A9329D", fontSize: 24 }}
@@ -347,6 +358,13 @@ export default function ChatDetail({ navigation }) {
           </TouchableOpacity>
         </View>
       )}
+      <BottomSheetDetailRoom
+        ref={sheetRef}
+        height={600}
+        onRefresh={onRefresh}
+        roomData={roomData}
+        userData={userData}
+      />
     </>
   );
 }

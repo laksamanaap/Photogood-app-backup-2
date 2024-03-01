@@ -13,9 +13,9 @@ import SearchRoom from "../components/SearchRoom";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import BottomSheetUI from "../components/BottomSheetChat";
 import ChatList from "../components/ChatList";
+
 import client from "../utils/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import moment from "moment";
 
 export default function Chat({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -60,6 +60,7 @@ export default function Chat({ navigation }) {
       console.error("Error refreshing user detail:", error);
     } finally {
       setRefreshing(false);
+      setLoading(false);
     }
   };
 
