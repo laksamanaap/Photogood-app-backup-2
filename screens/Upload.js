@@ -535,6 +535,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 25,
     padding: 10,
-    borderRadius: 50,
+    borderRadius: 4,
   },
 });

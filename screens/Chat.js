@@ -36,7 +36,10 @@ export default function Chat({ navigation }) {
     }
   };
 
-  const handleSearchRoom = (results) => {};
+  const handleSearchRoom = (results) => {
+    console.log(results, "RESULTS FROM SEARCH ROOM DISCUSS");
+    setChatData(results);
+  };
 
   const openBottomSheet = () => {
     sheetRef.current?.open();

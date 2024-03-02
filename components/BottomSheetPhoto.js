@@ -446,7 +446,7 @@ const BottomSheetGIF = forwardRef(
                       )}
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.menuIcons}>
+                  {/* <View style={styles.menuIcons}>
                     <TouchableOpacity
                       style={styles.menuIcon}
                       onPress={toggleMenu}
@@ -456,7 +456,7 @@ const BottomSheetGIF = forwardRef(
                         style={{ color: "#FFF", fontSize: 16 }}
                       />
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
                 </>
               ) : (
                 <TouchableOpacity
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
   downloadIcons: {
     position: "absolute",
     top: 15,
-    right: 65,
+    right: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

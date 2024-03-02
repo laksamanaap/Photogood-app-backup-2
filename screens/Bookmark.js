@@ -279,7 +279,7 @@ export default function Bookmark({ navigation }) {
           ) : (
             <View style={styles.textWrapper}>
               <Text style={styles.textBookmark}>
-                User belum menyukai apapun!
+                User belum menyimpan apapun!
               </Text>
             </View>
           )

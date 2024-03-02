@@ -29,7 +29,7 @@ const SearchPhotos = ({ onSearchResults }) => {
     try {
       setLoading(true);
       const response = await client.get(
-        `/search-photo?judul_foto=${searchQuery}&deskripsi_foto=${searchQuery}`
+        `/search-room-discuss?nama_ruang=${searchQuery}`
       );
       console.log("Response in searching : ", response.data);
       onSearchResults(response.data);

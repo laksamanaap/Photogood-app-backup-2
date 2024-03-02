@@ -156,7 +156,7 @@ const BottomSheetCommentUI = forwardRef(
               return (
                 <View style={styles.comment} key={index}>
                   <View style={styles.userAvatarContainer}>
-                    {comment.user.foto_profil ? (
+                    {comment?.user?.foto_profil ? (
                       <Image
                         source={{ uri: comment.user.foto_profil }}
                         style={{ width: 40, height: 40, borderRadius: 50 }}
@@ -167,7 +167,7 @@ const BottomSheetCommentUI = forwardRef(
                         style={{ width: 40, height: 40, borderRadius: 100 }}
                       />
                     )}
-                    {status === "2" && (
+                    {comment?.user?.status === "2" && (
                       <Animated.View
                         style={[
                           styles.crownWrapperComment,
