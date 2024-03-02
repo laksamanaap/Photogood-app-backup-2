@@ -36,6 +36,7 @@ export default function Home({ navigation }) {
   const route = useRoute();
   const routes = route;
   const handleRefresh = routes?.params?.onRefreshHome;
+  const [isLoved, setIsLoved] = useState(false);
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -217,6 +218,7 @@ export default function Home({ navigation }) {
               gif={photo}
               openBottomSheetPhoto={openBottomSheetPhoto}
               fetchData={fetchData}
+              navigation={navigation}
             />
           </>
         );

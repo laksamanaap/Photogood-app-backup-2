@@ -39,6 +39,7 @@ const BottomSheetGIF = forwardRef(
     const [isMenuExpanded, setIsMenuExpanded] = useState(false);
 
     const [userData, setUserData] = useState(null);
+    const [likeData, setLikeData] = useState(null);
     const [userStatus, setUserStatus] = useState("1");
     const [memberId, setMemberId] = useState(null);
     const [token, setToken] = useState(null);
@@ -76,9 +77,22 @@ const BottomSheetGIF = forwardRef(
       }
     }, [isShining]);
 
-    const toggleLove = () => {
-      setIsLoved(!isLoved);
-      startLoveAnimation();
+    const toggleLove = async () => {
+      console.log(
+        "============================ DIPENCET ================================= "
+      );
+      try {
+        let newIsLoved = !isLoved;
+        setIsLoved(newIsLoved);
+        if (newIsLoved) {
+          await storeUserLike();
+        } else {
+          await deleteUserLike();
+        }
+        startLoveAnimation();
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     const toggleBookmark = () => {
@@ -168,6 +182,7 @@ const BottomSheetGIF = forwardRef(
       getTokenFromStorage();
       fetchUserDetail();
       fetchGIFData();
+      showPhotoLike();
     }, [id]);
 
     const {
@@ -219,6 +234,7 @@ const BottomSheetGIF = forwardRef(
       setRefreshing(true);
       try {
         await fetchGIFData();
+        await showPhotoLike();
       } catch (error) {
         console.error("Error refreshing user detail:", error);
       } finally {
@@ -245,6 +261,19 @@ const BottomSheetGIF = forwardRef(
       }
     };
 
+    const showPhotoLike = async () => {
+      console.log(foto_id, "FOTO ID JANCOK");
+      try {
+        const response = await client.get(
+          `v1/show-photo-like/${foto_id}?token=${token}`
+        );
+        console.log(response?.data?.likes_count, "PHOTO LIKE");
+        setLikeData(response?.data?.likes_count);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const storeUserLike = async () => {
       try {
         const payload = {
@@ -257,7 +286,24 @@ const BottomSheetGIF = forwardRef(
         );
         console.log(response?.data, "LIKE RESPONSE");
         if (response?.status === 200) {
-          toggleLove();
+          onRefresh();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const deleteUserLike = async () => {
+      try {
+        const payload = {
+          foto_id: String(foto_id),
+        };
+        const response = await client.post(
+          `v1/delete-guest-like?token=${token}`,
+          payload
+        );
+        console.log(response?.data, "LIKE DELETE RESPONSE");
+        if (response?.status === 200) {
           onRefresh();
         }
       } catch (error) {
@@ -387,10 +433,10 @@ const BottomSheetGIF = forwardRef(
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.bottomSheetButton}
-                onPress={storeUserLike}
+                onPress={toggleLove}
               >
                 <AntDesign
-                  name={"hearto"}
+                  name={isLoved ? "heart" : "hearto"}
                   style={{ color: "#A9329D", fontSize: 20 }}
                 />
               </TouchableOpacity>
@@ -498,7 +544,7 @@ const BottomSheetGIF = forwardRef(
               <View style={styles.iconWrapper}>
                 <View style={styles.iconTextWrapper}>
                   <Text style={{ fontFamily: "Poppins-Bold", marginTop: 2 }}>
-                    {gifData?.like?.length}
+                    {likeData}
                   </Text>
                   <TouchableOpacity
                     style={[styles.button, { minWidth: 22.5, minHeight: 22.5 }]}
@@ -757,6 +803,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: "100%",
     height: 200,
+    overlayColor: "#F7F2F9",
   },
   bottomSheetTop: {
     flexWrap: "wrap",

@@ -10,7 +10,13 @@ import {
   Text,
 } from "react-native";
 
-const RenderMasonryList = ({ gif, photo, openBottomSheetPhoto, fetchData }) => {
+const RenderMasonryList = ({
+  gif,
+  photo,
+  openBottomSheetPhoto,
+  fetchData,
+  navigation,
+}) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
