@@ -8,6 +8,7 @@ import {
   TextInput,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -165,6 +166,7 @@ export default function ChatDetail({ navigation }) {
       setJoin(true);
     } catch (error) {
       console.error(error);
+      Alert.alert("An error occured!", error?.response?.message);
     }
   };
 

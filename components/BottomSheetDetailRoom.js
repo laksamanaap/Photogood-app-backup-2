@@ -21,6 +21,7 @@ import Feather from "react-native-vector-icons/Feather";
 import Foundation from "react-native-vector-icons/Foundation";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
+import moment from "moment";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
@@ -41,6 +42,10 @@ const BottomSheetUI = forwardRef(
     };
 
     const [image, setImage] = useState(null);
+
+    const formatCreatedAt = (createdAt) => {
+      return moment(createdAt).format("DD/MM/YY, HH.mm");
+    };
 
     return (
       <>
@@ -74,20 +79,21 @@ const BottomSheetUI = forwardRef(
                     <Image
                       source={{ uri: image }}
                       style={{
-                        width: 135,
-                        height: 135,
+                        width: 125,
+                        height: 125,
                         borderRadius: 100,
                         marginBottom: 15,
                       }}
                     />
-                  ) : userData?.foto_profil ? (
+                  ) : roomData?.profil_ruang ? (
                     <Image
-                      source={{ uri: userData.foto_profil }}
+                      source={{ uri: roomData.profil_ruang }}
                       style={{
-                        width: 135,
-                        height: 135,
+                        width: 125,
+                        height: 125,
                         borderRadius: 100,
                         marginBottom: 15,
+                        overlayColor: "#F7F2F9",
                       }}
                     />
                   ) : (
@@ -107,7 +113,6 @@ const BottomSheetUI = forwardRef(
 
                 <View
                   style={{
-                    marginTop: 12,
                     flexDirection: "row",
                     justifyContent: "center",
                   }}
@@ -118,7 +123,7 @@ const BottomSheetUI = forwardRef(
                       fontSize: 16,
                     }}
                   >
-                    Tobrut (tobat brutal)
+                    {roomData?.nama_ruang}
                   </Text>
                 </View>
                 <View
@@ -136,7 +141,7 @@ const BottomSheetUI = forwardRef(
                       fontSize: 13,
                     }}
                   >
-                    Ruang Diskusi - 1 Member
+                    Ruang Diskusi - {roomData?.member?.length} Anggota
                   </Text>
                   <TouchableOpacity style={{ marginBottom: 4 }}>
                     <MaterialIcon
@@ -160,28 +165,48 @@ const BottomSheetUI = forwardRef(
                       color: "#7C7C7C",
                     }}
                   >
-                    Dibuat oleh laksa, 14/12/05, 20.08
+                    Dibuat oleh {roomData?.owner?.username},{" "}
+                    {formatCreatedAt(roomData?.created_at)}
                   </Text>
                 </View>
                 <View style={{ width: "100%", marginTop: 30 }}>
                   <View style={styles.inputContainer}>
                     <Text style={styles.label}>Nama Album</Text>
-                    <TextInput style={styles.input} placeholder="Nama Album" />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Nama Album"
+                      defaultValue={roomData?.nama_ruang}
+                    />
                   </View>
                   <View style={styles.inputContainer}>
                     <Text style={styles.label}>Deskripsi Album</Text>
                     <TextInput
                       style={styles.input}
                       placeholder="Deskripsi Album"
+                      defaultValue={roomData?.deskripsi_ruang}
                     />
                   </View>
-                  <View>
-                    <TouchableOpacity
-                      style={[styles.button, { backgroundColor: "#A9329D" }]}
-                    >
-                      <Text style={styles.buttonText}>Update Album</Text>
-                    </TouchableOpacity>
-                  </View>
+                  {roomData?.owner?.user_id === userData?.user_id ? (
+                    <View>
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#A9329D" }]}
+                      >
+                        <Text style={styles.buttonText}>Update Album</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View>
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          { backgroundColor: "#7c7c7c", opacity: 0.5 },
+                        ]}
+                        disabled
+                      >
+                        <Text style={styles.buttonText}>Update Album</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </View>
             </ScrollView>
@@ -247,8 +272,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   imagePreview: {
-    width: 135,
-    height: 135,
+    width: 125,
+    height: 125,
     borderWidth: 2,
     borderRadius: 100,
     padding: 10,
