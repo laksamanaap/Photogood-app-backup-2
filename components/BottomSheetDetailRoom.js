@@ -27,7 +27,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
 
 const BottomSheetUI = forwardRef(
-  ({ height, onRefresh, roomData, userData }, ref) => {
+  ({ height, onRefresh, roomData, userData, token }, ref) => {
+    const [albumName, setAlbumName] = useState(roomData?.nama_ruang);
+    const [albumDescription, setAlbumDescription] = useState(
+      roomData?.deskripsi_ruang
+    );
+    const [isUpdating, setIsUpdating] = useState(false);
+
     const pickImage = async (sourceType) => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -46,6 +52,56 @@ const BottomSheetUI = forwardRef(
     const formatCreatedAt = (createdAt) => {
       return moment(createdAt).format("DD/MM/YY, HH.mm");
     };
+
+    const updateRoomDiscuss = async () => {
+      setIsUpdating(true);
+
+      try {
+        const payload = {
+          ruang_id: roomData?.ruang_id,
+          nama_ruang: albumName,
+          deskripsi_ruang: albumDescription,
+        };
+
+        const response = await client.post(
+          `v1/update-room?token=${token}`,
+          payload
+        );
+
+        if (image) {
+          const imageData = new FormData();
+          imageData.append("ruang_id", roomData?.ruang_id);
+          imageData.append("images", {
+            uri: image,
+            name: "photo.jpg",
+            type: "image/jpeg",
+          });
+          const responseImage = await client.post(
+            `v1/store-photo-room?token=${token}`,
+            imageData,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          console.log(responseImage?.data, "RESPONSE UPDATE ROOM MEMBER");
+        }
+
+        console.log(response?.data, "RESPONSE UPDATE ROOM MEMBER");
+
+        onRefresh();
+        Alert.alert("Success", "Berhasil update data album");
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsUpdating(false);
+      }
+    };
+
+    console.log(albumName, "NAMA ALBUM UPDATE");
+    console.log(albumDescription, "DESKRIPSI ALBUM UPDATE");
 
     return (
       <>
@@ -83,6 +139,7 @@ const BottomSheetUI = forwardRef(
                         height: 125,
                         borderRadius: 100,
                         marginBottom: 15,
+                        overlayColor: "#F7F2F9",
                       }}
                     />
                   ) : roomData?.profil_ruang ? (
@@ -175,7 +232,8 @@ const BottomSheetUI = forwardRef(
                     <TextInput
                       style={styles.input}
                       placeholder="Nama Album"
-                      defaultValue={roomData?.nama_ruang}
+                      value={albumName}
+                      onChangeText={(text) => setAlbumName(text)}
                     />
                   </View>
                   <View style={styles.inputContainer}>
@@ -183,13 +241,22 @@ const BottomSheetUI = forwardRef(
                     <TextInput
                       style={styles.input}
                       placeholder="Deskripsi Album"
-                      defaultValue={roomData?.deskripsi_ruang}
+                      value={albumDescription}
+                      onChangeText={(text) => setAlbumDescription(text)}
                     />
                   </View>
                   {roomData?.owner?.user_id === userData?.user_id ? (
                     <View>
                       <TouchableOpacity
-                        style={[styles.button, { backgroundColor: "#A9329D" }]}
+                        style={[
+                          styles.button,
+                          {
+                            backgroundColor: "#A9329D",
+                            opacity: isUpdating ? 0.5 : 1,
+                          },
+                        ]}
+                        onPress={updateRoomDiscuss}
+                        disabled={isUpdating}
                       >
                         <Text style={styles.buttonText}>Update Album</Text>
                       </TouchableOpacity>

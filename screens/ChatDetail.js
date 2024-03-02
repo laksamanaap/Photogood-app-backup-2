@@ -366,6 +366,7 @@ export default function ChatDetail({ navigation }) {
         onRefresh={onRefresh}
         roomData={roomData}
         userData={userData}
+        token={token}
       />
     </>
   );
