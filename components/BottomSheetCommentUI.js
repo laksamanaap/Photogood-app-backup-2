@@ -25,6 +25,11 @@ const BottomSheetCommentUI = forwardRef(
   ({ foto_id, user_id, comment, onRefresh, status }, ref) => {
     console.log("Bottom Sheet Comment : ", ref);
     const [token, setToken] = useState(null);
+    const [userData, setUserData] = useState(null);
+    const [userStatus, setUserStatus] = useState("1");
+    const [memberId, setMemberId] = useState(null);
+
+    const [loading, setLoading] = useState(true);
     const [newComment, setNewComment] = useState("");
 
     const [isShining, setIsShining] = useState(false);
@@ -84,6 +89,20 @@ const BottomSheetCommentUI = forwardRef(
       }
     };
 
+    const fetchUserDetail = async () => {
+      try {
+        const response = await client.get(`v1/show-user-detail?token=${token}`);
+        console.log("upload user detail : ", response?.data);
+        setUserData(response?.data);
+        setUserStatus(response?.data.status);
+        setMemberId(response?.data?.member?.member_id);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     function formatTime(createdAt) {
       const currentTime = new Date();
       const commentTime = new Date(createdAt);
@@ -126,8 +145,26 @@ const BottomSheetCommentUI = forwardRef(
       }
     };
 
+    const deleteUserComment = async (komentarID) => {
+      console.log(komentarID, "========== KOMENTAR ID ===========");
+      try {
+        const payload = {
+          komentar_id: String(komentarID),
+        };
+        const response = await client.post(
+          `v1/delete-guest-comment?token=${token}`,
+          payload
+        );
+        console.log(response);
+        onRefresh();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     useEffect(() => {
       getTokenFromStorage();
+      fetchUserDetail();
     }, []);
 
     return (
@@ -156,7 +193,7 @@ const BottomSheetCommentUI = forwardRef(
               return (
                 <View style={styles.comment} key={index}>
                   <View style={styles.userAvatarContainer}>
-                    {comment?.user?.foto_profil ? (
+                    {comment?.user.foto_profil ? (
                       <Image
                         source={{ uri: comment.user.foto_profil }}
                         style={{ width: 40, height: 40, borderRadius: 50 }}
@@ -181,7 +218,7 @@ const BottomSheetCommentUI = forwardRef(
                       >
                         <Foundation
                           name="crown"
-                          size={16}
+                          size={13}
                           color={"#FFBB48"}
                           style={styles.crownIconComment}
                         />
@@ -190,12 +227,35 @@ const BottomSheetCommentUI = forwardRef(
                   </View>
                   <View>
                     <View style={styles.commentWrapper}>
-                      <Text style={styles.commentAuthor}>
-                        {comment?.user.nama_lengkap || comment?.user.username}
-                      </Text>
-                      <Text style={styles.commentHours}>
-                        {formatTime(comment.created_at)}
-                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "flex-start",
+                          gap: 12,
+                        }}
+                      >
+                        <Text style={styles.commentAuthor}>
+                          {comment?.user.nama_lengkap || comment?.user.username}
+                        </Text>
+                        <Text style={styles.commentHours}>
+                          {formatTime(comment.created_at)}
+                        </Text>
+                      </View>
+                      {comment?.user?.user_id === user_id && (
+                        <View>
+                          <TouchableOpacity
+                            style={styles.button}
+                            onPress={() =>
+                              deleteUserComment(comment?.komentar_id)
+                            }
+                          >
+                            <Feather
+                              name={"trash-2"}
+                              style={{ color: "#FFF", fontSize: 14 }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      )}
                     </View>
                     <Text style={styles.commentText}>
                       {comment?.isi_komentar}
@@ -237,7 +297,10 @@ const styles = StyleSheet.create({
   },
   commentWrapper: {
     flexDirection: "row",
+    alignItems: "flex-start",
     gap: 12,
+    justifyContent: "space-between",
+    width: "92%",
   },
   commentContainer: {
     display: "flex",
@@ -323,5 +386,14 @@ const styles = StyleSheet.create({
   },
   userAvatarContainer: {
     position: "relative",
+  },
+  button: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#A9329D",
+    padding: 4,
+    borderRadius: 50,
+    color: "white",
   },
 });

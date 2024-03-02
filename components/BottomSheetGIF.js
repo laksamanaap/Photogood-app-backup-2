@@ -38,8 +38,8 @@ const BottomSheetGIF = forwardRef(
     const [isBookmark, setIsBookmark] = useState(false);
     const [isMenuExpanded, setIsMenuExpanded] = useState(false);
 
-    const [userData, setUserData] = useState(null);
     const [likeData, setLikeData] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [userStatus, setUserStatus] = useState("1");
     const [memberId, setMemberId] = useState(null);
     const [token, setToken] = useState(null);
@@ -183,7 +183,7 @@ const BottomSheetGIF = forwardRef(
       fetchUserDetail();
       fetchGIFData();
       showPhotoLike();
-    }, []);
+    }, [id]);
 
     const {
       foto_id,
@@ -306,6 +306,23 @@ const BottomSheetGIF = forwardRef(
         if (response?.status === 200) {
           onRefresh();
         }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const deleteUserComment = async (komentarID) => {
+      console.log(komentarID, "========== KOMENTAR ID ===========");
+      try {
+        const payload = {
+          komentar_id: String(komentarID),
+        };
+        const response = await client.post(
+          `v1/delete-guest-comment?token=${token}`,
+          payload
+        );
+        console.log(response);
+        onRefresh();
       } catch (error) {
         console.error(error);
       }
@@ -617,13 +634,36 @@ const BottomSheetGIF = forwardRef(
                       </View>
                       <View>
                         <View style={styles.commentWrapper}>
-                          <Text style={styles.commentAuthor}>
-                            {comment?.user.nama_lengkap ||
-                              comment?.user.username}
-                          </Text>
-                          <Text style={styles.commentHours}>
-                            {formatTime(comment.created_at)}
-                          </Text>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "flex-start",
+                              gap: 12,
+                            }}
+                          >
+                            <Text style={styles.commentAuthor}>
+                              {comment?.user.nama_lengkap ||
+                                comment?.user.username}
+                            </Text>
+                            <Text style={styles.commentHours}>
+                              {formatTime(comment.created_at)}
+                            </Text>
+                          </View>
+                          {comment?.user?.user_id === userData?.user_id && (
+                            <View>
+                              <TouchableOpacity
+                                style={styles.button}
+                                onPress={() =>
+                                  deleteUserComment(comment?.komentar_id)
+                                }
+                              >
+                                <Feather
+                                  name={"trash-2"}
+                                  style={{ color: "#FFF", fontSize: 14 }}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          )}
                         </View>
                         <Text style={styles.commentText}>
                           {comment?.isi_komentar}
@@ -825,6 +865,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     gap: 12,
+    justifyContent: "space-between",
+    width: "92%",
   },
   commentHours: {
     fontSize: 13,
