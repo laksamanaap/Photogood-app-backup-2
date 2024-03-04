@@ -19,6 +19,8 @@ const RenderMasonryList = ({
 }) => {
   const [refreshing, setRefreshing] = useState(false);
 
+  console.log(gif, "gif data from home");
+
   const onRefresh = async () => {
     setRefreshing(true);
     try {

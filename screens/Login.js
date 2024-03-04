@@ -20,7 +20,7 @@ import { useLoadFonts } from "../components/Fonts";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
 
-export default function Login(props) {
+export default function Login(props, { navigation }) {
   console.log(props);
   const fontsLoaded = useLoadFonts();
 
@@ -192,6 +192,14 @@ export default function Login(props) {
           </Text>
         </TouchableOpacity>
       </View> */}
+      {/* <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <Text style={styles.OAuthDescBottom}>
+          Belum punya akun?{" "}
+          <Text style={{ fontFamily: "Poppins-Bold", color: "#A9329D" }}>
+            Register
+          </Text>
+        </Text>
+      </TouchableOpacity> */}
     </ScrollView>
   );
 }
@@ -247,5 +255,15 @@ const styles = StyleSheet.create({
     gap: 8,
     padding: 10,
     borderRadius: 50,
+  },
+  OAuthDescBottom: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15,
+    marginBottom: 15,
+    color: "#6B6B6B",
+    fontSize: 16,
+    fontFamily: "Poppins-Regular",
   },
 });

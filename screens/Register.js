@@ -157,10 +157,10 @@ export default function Register({ navigation }) {
               </Text>
             )}
           </TouchableOpacity>
-          <View>
+          {/* <View>
             <Text style={styles.OAuthDesc}>Atau masuk menggunakan</Text>
-          </View>
-          <View style={styles.OAuthContainer}>
+          </View> */}
+          {/* <View style={styles.OAuthContainer}>
             <TouchableOpacity style={styles.OAuthButton}>
               <AntDesign
                 name="google"
@@ -178,8 +178,8 @@ export default function Register({ navigation }) {
                 Google
               </Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.OAuthContainer}>
+          </View> */}
+          {/* <View style={styles.OAuthContainer}>
             <TouchableOpacity style={styles.OAuthButton}>
               <AntDesign
                 name="facebook-square"
@@ -197,9 +197,14 @@ export default function Register({ navigation }) {
                 Facebook
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.OAuthDescBottom}>Sudah punya akun? Login</Text>
+            <Text style={styles.OAuthDescBottom}>
+              Sudah punya akun?{" "}
+              <Text style={{ fontFamily: "Poppins-Bold", color: "#A9329D" }}>
+                Login
+              </Text>
+            </Text>
           </TouchableOpacity>
         </ScrollView>
       </TouchableWithoutFeedback>

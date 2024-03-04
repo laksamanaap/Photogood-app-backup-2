@@ -138,7 +138,7 @@ export default function Upload() {
       formData.append("user_id", userData?.user_id);
       formData.append("kategori_id", "1");
       formData.append("type_foto", typePhoto);
-      formData.append("status", "1");
+      formData.append("status", "0");
 
       const responseMember = await client.post(
         "/v1/store-guest-photo",
@@ -220,7 +220,7 @@ export default function Upload() {
       formData.append("member_id", memberId);
       formData.append("kategori_id", "1");
       formData.append("type_foto", typePhoto);
-      formData.append("status", "1");
+      formData.append("status", "0");
 
       const responseMember = await client.post(
         "/v2/store-member-photo",

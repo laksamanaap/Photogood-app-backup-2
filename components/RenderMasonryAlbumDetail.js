@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -8,9 +8,16 @@ import {
   Text,
 } from "react-native";
 
-const RenderMasonryList = ({ gif }) => {
-  const itemsPerRow = 4;
+const RenderMasonryList = ({ gif, selectedPhotos, setSelectedPhotos }) => {
+  const togglePhotoSelection = (photoId) => {
+    if (selectedPhotos.includes(photoId)) {
+      setSelectedPhotos(selectedPhotos.filter((id) => id !== photoId));
+    } else {
+      setSelectedPhotos([...selectedPhotos, photoId]);
+    }
+  };
 
+  const itemsPerRow = 4;
   const albumDetailPhotos = gif?.bookmark_fotos;
   console.log(albumDetailPhotos, "MASONRY ALBUM DETAIL ");
 
@@ -18,11 +25,20 @@ const RenderMasonryList = ({ gif }) => {
     <ScrollView>
       <View style={styles.container}>
         {albumDetailPhotos?.map((item, index) => (
-          <TouchableOpacity key={index} style={[styles.cardContainer]}>
+          <TouchableOpacity
+            key={index}
+            style={[styles.cardContainer]}
+            onPress={() => togglePhotoSelection(item?.bookmark_id)}
+          >
             <Image
-              source={{ uri: item?.foto.lokasi_file }}
+              source={{ uri: item?.foto?.lokasi_file }}
               style={styles.image}
             />
+            <View style={styles.checkboxContainer}>
+              <Text style={styles.checkbox}>
+                {selectedPhotos?.includes(item?.bookmark_id) ? "✓" : ""}
+              </Text>
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -37,6 +53,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: "25%",
+    position: "relative",
   },
   image: {
     marginTop: 16,
@@ -44,6 +61,21 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 8,
     overlayColor: "#F2F2F2",
+    position: "relative",
+  },
+  checkboxContainer: {
+    position: "absolute",
+    top: 20,
+    right: 15,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 10,
+    height: 15,
+    width: 15,
+  },
+  checkbox: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    marginLeft: 3,
   },
 });
 

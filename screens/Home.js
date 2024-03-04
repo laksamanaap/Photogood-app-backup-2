@@ -31,6 +31,7 @@ import RenderMasonryGif from "../components/RenderMasonryGif";
 import RenderMasonryVector from "../components/RenderMasonryVector";
 
 import client from "../utils/client";
+import ChatList from "../components/ChatList";
 
 export default function Home({ navigation }) {
   const route = useRoute();
@@ -154,6 +155,7 @@ export default function Home({ navigation }) {
 
   // Fetch Data
   const fetchData = async () => {
+    console.log(" =============== REFRESH DATA =============== ");
     try {
       await fetchGIFData();
       await fetchPhotoData();
@@ -166,7 +168,8 @@ export default function Home({ navigation }) {
   const fetchGIFData = async () => {
     try {
       const response = await client.get("/get-all-gif");
-      setGIF(response.data);
+      // console.log(response?.data, "RESPONSE DATA FROM FETCH GIF DATA");
+      setGIF(response?.data);
     } catch (error) {
       console.log(error);
     }
@@ -195,7 +198,7 @@ export default function Home({ navigation }) {
       handleRefresh();
     }
     fetchData();
-  }, [handleRefresh]);
+  }, []);
 
   console.log("gif data from home : ", gif);
   console.log(searchResults, "=============== Search Results ===============");

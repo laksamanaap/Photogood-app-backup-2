@@ -6,10 +6,12 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import RenderMasonryAlbumDetail from "../components/RenderMasonryAlbumDetail";
 import Entypo from "react-native-vector-icons/Entypo";
+import Feather from "react-native-vector-icons/Feather";
 import { useRoute } from "@react-navigation/native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,6 +24,7 @@ export default function AlbumDetail({ navigation }) {
   const [albumData, setAlbumData] = useState({});
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedPhotos, setSelectedPhotos] = useState([]);
 
   console.log(id_album, "ID ALBUM RAWRRRRRRRRRR");
 
@@ -114,13 +117,6 @@ export default function AlbumDetail({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    getTokenFromStorage();
-    fetchAlbumDetail();
-  }, []);
-
-  console.log(albumData, "ALBUM DATA RAWWWWWWR");
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -132,6 +128,33 @@ export default function AlbumDetail({ navigation }) {
     }
   };
 
+  const deleteAlbumBoomarks = async () => {
+    console.log(selectedPhotos, "BOOKMARK SELECTED!");
+    try {
+      const payload = {
+        bookmark_ids: selectedPhotos,
+      };
+      const response = await client.post(
+        `v2/delete-bookmark?token=${token}`,
+        payload
+      );
+      console.log(response?.data);
+      Alert.alert("Success", "Berhasil menghapus bookmark!");
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getTokenFromStorage();
+    fetchAlbumDetail();
+  }, []);
+
+  console.log(albumData, "ALBUM DATA RAWWWWWWR");
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -139,6 +162,8 @@ export default function AlbumDetail({ navigation }) {
       </View>
     );
   }
+
+  console.log(selectedPhotos, "SELECTED PHOTOS TO DELETED");
 
   return (
     <>
@@ -156,11 +181,42 @@ export default function AlbumDetail({ navigation }) {
             <Entypo name="chevron-left" size={26} color="white" />
           </View>
         </TouchableOpacity>
-        <View style={styles.marginContainer}>
-          <Text style={styles.AlbumTitle}>{albumData?.nama_album}</Text>
-          <Text style={styles.AlbumSubtitle}>
-            {albumData?.total_bookmark_data} Foto
-          </Text>
+        <View
+          style={{
+            width: "90%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "85%",
+            }}
+          >
+            <View style={styles.marginContainer}>
+              <Text style={styles.AlbumTitle}>{albumData?.nama_album}</Text>
+              <Text style={styles.AlbumSubtitle}>
+                {albumData?.total_bookmark_data} Foto
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={[
+                styles.buttonIcon,
+                { opacity: selectedPhotos.length === 0 ? 0.4 : 1 },
+              ]}
+              disabled={selectedPhotos.length === 0}
+              onPress={deleteAlbumBoomarks}
+            >
+              <Feather
+                name={"trash-2"}
+                style={{ color: "#FFF", fontSize: 14 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <Text>Edit</Text>
         </View>
       </View>
       <ScrollView
@@ -170,7 +226,11 @@ export default function AlbumDetail({ navigation }) {
         }
       >
         {albumData?.bookmark_fotos.length > 0 ? (
-          <RenderMasonryAlbumDetail gif={albumData} />
+          <RenderMasonryAlbumDetail
+            gif={albumData}
+            selectedPhotos={selectedPhotos}
+            setSelectedPhotos={setSelectedPhotos}
+          />
         ) : (
           <View style={styles.textWrapper}>
             <Text style={styles.textBookmark}>
@@ -239,6 +299,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "50%",
+    backgroundColor: "#A9329D",
+    padding: 4,
+    borderRadius: 50,
+  },
+  buttonIcon: {
+    width: 23,
     backgroundColor: "#A9329D",
     padding: 4,
     borderRadius: 50,
