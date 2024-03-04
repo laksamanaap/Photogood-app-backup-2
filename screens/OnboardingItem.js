@@ -13,13 +13,17 @@ const OnboardingItem = ({ item }) => {
   return (
     <View style={([styles.container], { width })}>
       <View
-        style={{ height: 500, justifyContent: "center", alignItems: "center" }}
+        style={{
+          height: 525,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Image
           source={item?.image}
           style={[styles.image, { width, resizeMode: "contain" }]}
         />
-        <View style={{ marginTop: 32 }}>
+        <View style={{ marginTop: 32, padding: 20 }}>
           <Text style={styles.title}>{item?.title}</Text>
           <Text style={styles.subtitle}>{item?.description}</Text>
         </View>

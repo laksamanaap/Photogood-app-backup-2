@@ -3,7 +3,8 @@ export default [
     id: "1",
     image: require("../assets/images/slides-3.gif"),
     title: "Selamat datang di Photogood",
-    description: "Lorem ipsum dolor sir amet",
+    description:
+      "Photogood merupakan platform elegan untuk galeri foto dan diskusi fotografi antar sesama pengguna.",
   },
   {
     id: "2",

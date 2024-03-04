@@ -22,13 +22,30 @@ const screens = {
   },
   Register: {
     screen: Register,
-    navigationOptions: {
-      title: null,
-      headerStyle: {
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      },
+    navigationOptions: ({ navigation }) => {
+      return {
+        title: null,
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View
+              style={{
+                marginTop: 16,
+                marginLeft: 16,
+                backgroundColor: "#A9329D",
+                borderRadius: 50,
+                padding: 4,
+              }}
+            >
+              <Entypo name="chevron-left" size={26} color="white" />
+            </View>
+          </TouchableOpacity>
+        ),
+      };
     },
   },
   Login: {
