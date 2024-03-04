@@ -329,21 +329,19 @@ export default function Bookmark({ navigation }) {
         name={selectedCardName}
         image={selectedCardImage}
       /> */}
-      {activeTab === "posts" && (
+      {activeTab === "posts" ? (
         <BottomSheetBookmarkPost
           ref={sheetReefBookmarkPost}
           height={685}
           id={selectedBookmarkID}
         />
-      )}
-      {activeTab === "saved" && (
+      ) : activeTab === "saved" ? (
         <BottomSheetBookmarkSaved
           ref={sheetReefBookmarkSaved}
           height={685}
           id={selectedBookmarkSavedID}
         />
-      )}
-      {activeTab !== "posts" && activeTab !== "saved" && (
+      ) : (
         <BottomSheetBookmarkLiked
           ref={sheetReefBookmarkLiked}
           height={685}

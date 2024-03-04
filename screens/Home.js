@@ -136,8 +136,6 @@ export default function Home({ navigation }) {
 
   const openBottomSheetVector = (cardID, cardName, cardImage) => {
     setSelectedCardID(cardID);
-    setSelectedCardName(cardName);
-    setSelectedCardImage(cardImage);
     sheetRef.current?.open();
   };
 
@@ -228,8 +226,8 @@ export default function Home({ navigation }) {
       case "vector":
         return (
           <RenderMasonryVector
-            gif={gifExample}
-            openBottomSheet={openBottomSheetVector}
+            gif={vector}
+            openBottomSheetVector={openBottomSheetVector}
             fetchData={fetchData}
           />
         );
@@ -336,6 +334,12 @@ export default function Home({ navigation }) {
         ref={sheetRefPhoto}
         height={685}
         id={selectedPhotoID}
+        navigation={navigation}
+      />
+      <BottomSheetVector
+        ref={sheetRef}
+        height={685}
+        id={selectedCardID}
         navigation={navigation}
       />
     </>

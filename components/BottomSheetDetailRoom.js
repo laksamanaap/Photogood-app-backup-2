@@ -200,13 +200,13 @@ const BottomSheetUI = forwardRef(
                   >
                     Ruang Diskusi - {roomData?.member?.length} Anggota
                   </Text>
-                  <TouchableOpacity style={{ marginBottom: 4 }}>
+                  {/* <TouchableOpacity style={{ marginBottom: 4 }}>
                     <MaterialIcon
                       name="info-outline"
                       size={20}
                       color="#A9329D"
                     />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
                 <View
                   style={{
