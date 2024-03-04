@@ -14,6 +14,9 @@ import React, { useState, useRef, useEffect } from "react";
 import RenderMasonryBookmark from "../components/RenderMasonryBookmark";
 import RenderMasonryBookmarkSaved from "../components/RenderMasonryBookmarkSaved";
 import RenderMasonryBookmarkLiked from "../components/RenderMasonryBookmarkLiked";
+import BottomSheetBookmarkPost from "../components/BottomSheetBookmarkPost";
+import BottomSheetBookmarkSaved from "../components/BottomSheetBookmarkSaved";
+import BottomSheetBookmarkLiked from "../components/BottomSheetBookmarkLiked";
 import BottomSheetUI from "../components/BottomSheetUI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import client from "../utils/client";
@@ -29,7 +32,15 @@ export default function Bookmark({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const sheetRef = useRef(null);
+  const sheetReefBookmarkPost = useRef(null);
+  const sheetReefBookmarkSaved = useRef(null);
+  const sheetReefBookmarkLiked = useRef(null);
+
   const [selectedCardID, setSelectedCardID] = useState(null);
+  const [selectedBookmarkID, setSelectedBookmarkID] = useState(null);
+  const [selectedBookmarkSavedID, setSelectedBookmarkSavedID] = useState(null);
+  const [selectedBookmarkLikedID, setSelectedBookmarkLikedID] = useState(null);
+
   const [selectedCardName, setSelectedCardName] = useState(null);
   const [selectedCardImage, setSelectedCardImage] = useState(null);
   const [profileImage, setProfileImage] = useState(
@@ -45,12 +56,27 @@ export default function Bookmark({ navigation }) {
     setActiveTab(tab);
   };
 
-  const openBottomSheet = (cardID, cardName, cardImage) => {
-    setSelectedCardID(cardID);
-    setSelectedCardName(cardName);
-    setSelectedCardImage(cardImage);
-    sheetRef.current?.open();
+  const openBottomSheetBookmarkPost = (bookmarkID) => {
+    setSelectedBookmarkID(bookmarkID);
+    sheetReefBookmarkPost.current?.open();
   };
+
+  const openBottomSheetBookmarkSaved = (bookmarkID) => {
+    setSelectedBookmarkSavedID(bookmarkID);
+    sheetReefBookmarkSaved.current?.open();
+  };
+
+  const openBottomSheetBookmarkLiked = (bookmarkID) => {
+    setSelectedBookmarkLikedID(bookmarkID);
+    sheetReefBookmarkLiked.current?.open();
+  };
+
+  // const openBottomSheet = (cardID, cardName, cardImage) => {
+  //   setSelectedCardID(cardID);
+  //   setSelectedCardName(cardName);
+  //   setSelectedCardImage(cardImage);
+  //   sheetRef.current?.open();
+  // };
 
   const getTokenFromStorage = async () => {
     try {
@@ -261,7 +287,7 @@ export default function Bookmark({ navigation }) {
           post.length > 0 ? (
             <RenderMasonryBookmark
               gif={post}
-              openBottomSheet={openBottomSheet}
+              openBottomSheet={openBottomSheetBookmarkPost}
             />
           ) : (
             <View style={styles.textWrapper}>
@@ -274,7 +300,7 @@ export default function Bookmark({ navigation }) {
           saved.length > 0 ? (
             <RenderMasonryBookmarkSaved
               gif={saved}
-              openBottomSheet={openBottomSheet}
+              openBottomSheet={openBottomSheetBookmarkSaved}
             />
           ) : (
             <View style={styles.textWrapper}>
@@ -286,7 +312,7 @@ export default function Bookmark({ navigation }) {
         ) : likeData.length > 0 ? (
           <RenderMasonryBookmarkLiked
             gif={likeData}
-            openBottomSheet={openBottomSheet}
+            openBottomSheet={openBottomSheetBookmarkLiked}
           />
         ) : (
           <View style={styles.textWrapper}>
@@ -296,13 +322,34 @@ export default function Bookmark({ navigation }) {
           </View>
         )}
       </ScrollView>
-      <BottomSheetUI
+      {/* <BottomSheetUI
         ref={sheetRef}
         height={685}
         id={selectedCardID}
         name={selectedCardName}
         image={selectedCardImage}
-      />
+      /> */}
+      {activeTab === "posts" && (
+        <BottomSheetBookmarkPost
+          ref={sheetReefBookmarkPost}
+          height={685}
+          id={selectedBookmarkID}
+        />
+      )}
+      {activeTab === "saved" && (
+        <BottomSheetBookmarkSaved
+          ref={sheetReefBookmarkSaved}
+          height={685}
+          id={selectedBookmarkSavedID}
+        />
+      )}
+      {activeTab !== "posts" && activeTab !== "saved" && (
+        <BottomSheetBookmarkLiked
+          ref={sheetReefBookmarkLiked}
+          height={685}
+          id={selectedBookmarkLikedID}
+        />
+      )}
     </>
   );
 }

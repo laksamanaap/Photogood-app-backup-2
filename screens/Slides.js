@@ -4,24 +4,24 @@ export default [
     image: require("../assets/images/slides-3.gif"),
     title: "Selamat datang di Photogood",
     description:
-      "Photogood merupakan platform elegan untuk galeri foto dan diskusi fotografi antar sesama pengguna.",
+      "Merupakan platform elegan untuk galeri foto dan diskusi fotografi antar sesama pengguna.",
   },
   {
     id: "2",
     image: require("../assets/images/slides-2.gif"),
-    title: "Selamat Datang 2",
-    description: "Selamat datang deskripsi 2",
+    title: "Unggah dan Simpan Foto",
+    description: "Abadikan momen berharga kalian di photogood",
   },
   {
     id: "3",
     image: require("../assets/images/slides-2.gif"),
-    title: "Selamat Datang 3",
-    description: "Selamat datang deskripsi 3",
+    title: "Forum Diskusi",
+    description: "Bangun komunikasi antar pengguna photogood",
   },
   {
     id: "4",
     image: require("../assets/images/slides-2.gif"),
-    title: "Selamat Datang 4",
-    description: "Selamat datang deskripsi 4",
+    title: "Membership",
+    description: "Berlangganan untuk mendapatkan fitur yang lebih lengkap",
   },
 ];

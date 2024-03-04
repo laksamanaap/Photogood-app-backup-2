@@ -9,7 +9,7 @@ import {
   RefreshControl,
 } from "react-native";
 
-const RenderMasonryList = ({ gif, photo }) => {
+const RenderMasonryList = ({ gif, photo, openBottomSheet }) => {
   const getRandomHeight = () => {
     return Math.floor(Math.random() * 200) + 100;
   };
@@ -28,7 +28,16 @@ const RenderMasonryList = ({ gif, photo }) => {
       >
         <View style={{ flex: 1, flexDirection: "column" }}>
           {evenItems.map((item, index) => (
-            <TouchableOpacity key={index}>
+            <TouchableOpacity
+              key={index}
+              onPress={() =>
+                openBottomSheet(
+                  item?.foto_id,
+                  item?.judul_foto,
+                  item?.lokasi_file
+                )
+              }
+            >
               <View style={[styles.card, { height: getRandomHeight() }]}>
                 <Image
                   source={{ uri: item.foto.lokasi_file }}
@@ -40,7 +49,16 @@ const RenderMasonryList = ({ gif, photo }) => {
         </View>
         <View style={{ flex: 1, flexDirection: "column" }}>
           {oddItems.map((item, index) => (
-            <TouchableOpacity key={index}>
+            <TouchableOpacity
+              key={index}
+              onPress={() =>
+                openBottomSheet(
+                  item?.foto_id,
+                  item?.judul_foto,
+                  item?.lokasi_file
+                )
+              }
+            >
               <View style={[styles.card, { height: getRandomHeight() }]}>
                 <Image
                   source={{ uri: item.foto.lokasi_file }}

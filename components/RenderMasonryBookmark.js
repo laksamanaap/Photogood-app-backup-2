@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   FlatList,
   TouchableOpacity,
@@ -7,9 +7,10 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Text,
 } from "react-native";
 
-const RenderMasonryList = ({ gif, photo }) => {
+const RenderMasonryList = ({ gif, photo, openBottomSheet }) => {
   const getRandomHeight = () => {
     return Math.floor(Math.random() * 200) + 100;
   };
@@ -19,40 +20,60 @@ const RenderMasonryList = ({ gif, photo }) => {
 
   console.log(oddItems, "Odd Bookmark");
   return (
-    <ScrollView>
-      <View
-        style={{
-          flexDirection: "row",
-          paddingBottom: 40,
-          paddingHorizontal: 20,
-        }}
-      >
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          {evenItems.map((item, index) => (
-            <TouchableOpacity key={index}>
-              <View style={[styles.card, { height: getRandomHeight() }]}>
-                <Image
-                  source={{ uri: item.lokasi_file }}
-                  style={styles.image}
-                />
-              </View>
-            </TouchableOpacity>
-          ))}
+    <>
+      <ScrollView>
+        <View
+          style={{
+            flexDirection: "row",
+            paddingBottom: 40,
+            paddingHorizontal: 20,
+          }}
+        >
+          <View style={{ flex: 1, flexDirection: "column" }}>
+            {evenItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  openBottomSheet(
+                    item?.foto_id,
+                    item?.judul_foto,
+                    item?.lokasi_file
+                  )
+                }
+              >
+                <View style={[styles.card, { height: getRandomHeight() }]}>
+                  <Image
+                    source={{ uri: item.lokasi_file }}
+                    style={styles.image}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={{ flex: 1, flexDirection: "column" }}>
+            {oddItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  openBottomSheet(
+                    item?.foto_id,
+                    item?.judul_foto,
+                    item?.lokasi_file
+                  )
+                }
+              >
+                <View style={[styles.card, { height: getRandomHeight() }]}>
+                  <Image
+                    source={{ uri: item.lokasi_file }}
+                    style={styles.image}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          {oddItems.map((item, index) => (
-            <TouchableOpacity key={index}>
-              <View style={[styles.card, { height: getRandomHeight() }]}>
-                <Image
-                  source={{ uri: item.lokasi_file }}
-                  style={styles.image}
-                />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
