@@ -3,11 +3,23 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import Home from "../screens/Home";
 import Detail from "../screens/Detail";
+import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Entypo from "react-native-vector-icons/Entypo";
 
 const screens = {
+  Onboarding: {
+    screen: Onboarding,
+    navigationOptions: {
+      title: null,
+      headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+    },
+  },
   Register: {
     screen: Register,
     navigationOptions: {

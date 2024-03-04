@@ -289,7 +289,7 @@ const BottomSheetGIF = forwardRef(
           onRefresh();
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
