@@ -68,7 +68,7 @@ const Onboarding = ({ navigation }) => {
         </TouchableOpacity>
         <View style={{ marginTop: 16 }}>
           <Text style={styles.privacyPolicy}>
-            Dengan login atau registrasi, Anda menyetujui{" "}
+            Dengan Login atau Registrasi, Anda menyetujui{" "}
             <Text style={{ color: "#A9329D" }}>Syarat dan Ketentuan</Text> serta{" "}
             <Text style={{ color: "#A9329D" }}>Kebijakan privasi</Text> dari
             kami.

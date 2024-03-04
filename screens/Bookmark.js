@@ -329,25 +329,25 @@ export default function Bookmark({ navigation }) {
         name={selectedCardName}
         image={selectedCardImage}
       /> */}
-      {activeTab === "posts" ? (
-        <BottomSheetBookmarkPost
-          ref={sheetReefBookmarkPost}
-          height={685}
-          id={selectedBookmarkID}
-        />
+      <BottomSheetBookmarkPost
+        ref={sheetReefBookmarkPost}
+        height={685}
+        id={selectedBookmarkID}
+      />
+      <BottomSheetBookmarkSaved
+        ref={sheetReefBookmarkSaved}
+        height={685}
+        id={selectedBookmarkSavedID}
+      />
+      <BottomSheetBookmarkLiked
+        ref={sheetReefBookmarkLiked}
+        height={685}
+        id={selectedBookmarkLikedID}
+      />
+      {/* {activeTab === "posts" ? (
       ) : activeTab === "saved" ? (
-        <BottomSheetBookmarkSaved
-          ref={sheetReefBookmarkSaved}
-          height={685}
-          id={selectedBookmarkSavedID}
-        />
       ) : (
-        <BottomSheetBookmarkLiked
-          ref={sheetReefBookmarkLiked}
-          height={685}
-          id={selectedBookmarkLikedID}
-        />
-      )}
+      )} */}
     </>
   );
 }

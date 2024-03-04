@@ -18,7 +18,7 @@ export default [
     // image: require("../assets/images/slides-4.gif"),
     title: "Forum Diskusi",
     description:
-      "Bangun komunikasi dengan cara berdiskusi antar pengguna antar pengguna Photogood",
+      "Bangun komunikasi dengan cara berdiskusi antar pengguna Photogood",
   },
   {
     id: "4",
