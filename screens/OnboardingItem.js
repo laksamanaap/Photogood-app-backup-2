@@ -44,6 +44,8 @@ const styles = StyleSheet.create({
     flex: 0.7,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 24,
+    overlayColor: "white",
   },
   title: {
     fontFamily: "Poppins-Bold",
